@@ -2,13 +2,14 @@ from user import User
 from parking.parkingSlot import ParkingSlot
 from payment.payment import Payment
 from invoice import Invoice
-
+from database.databaseAccess import DatabaseAccess
 class Booking:
-    def __init__(self, user: User, duration: int, parkingSlot: ParkingSlot):
+    def __init__(self, user: User, duration: int, parkingSlot: ParkingSlot, database: DatabaseAccess):
         self.__isLateCheckOut = False
         self._user = user
         self._duration = duration
         self._parkingSlot = parkingSlot
+        self._database = database
         self.__isPaymentSuccessful = False
         self.__isCheckInSuccessful = False
 
