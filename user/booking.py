@@ -9,7 +9,7 @@ class Booking:
         self._user = user
         self._duration = duration
         self._parkingSlot = parkingSlot
-        self._database = database
+        self.__database = database
         self.__isPaymentSuccessful = False
         self.__isCheckInSuccessful = False
 

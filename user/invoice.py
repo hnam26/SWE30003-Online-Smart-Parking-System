@@ -3,7 +3,7 @@ from database.databaseAccess import DatabaseAccess
 class Invoice:
   def __init__(self, payment: Payment, database: DatabaseAccess):
     self._payment = payment
-    self._database = database
+    self.__database = database
 
   def generateInvoice(self):
     fee = self._payment.getAmount()

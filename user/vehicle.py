@@ -5,7 +5,7 @@ class Vehicle:
     def __init__(self, license : str, vehicleType : TypesOfVehicle, database: DatabaseAccess):
         self.__license = license
         self.__vehicleType = vehicleType
-        self._database = database
+        self.__database = database
 
     def __str__(self) -> str:
         return f"This is a car with:\nLicense: {self.getLicense()}\nType: {self.getVehicleType()}"
