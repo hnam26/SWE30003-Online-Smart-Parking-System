@@ -18,7 +18,7 @@ class User:
         self._vehicle = vehicle
         self._booking = booking
         self._payment = payment
-        self._database = database
+        self.__database = database
 
     def validateEmail(self, email: str) -> str:
         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'

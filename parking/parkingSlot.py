@@ -4,6 +4,8 @@ class ParkingSlot:
     def __init__(self, location: str, isAvailable: bool, database: DatabaseAccess):
         self.__location = location
         self.__isAvailable = isAvailable
+        self.__database = database
+        # save new record to db
 
     def getLocation(self) -> str:
         return self.__location

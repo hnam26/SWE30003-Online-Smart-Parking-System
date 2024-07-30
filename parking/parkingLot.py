@@ -8,7 +8,8 @@ class ParkingLot:
         self.__name = name
         self.__slots = slots
         self.__location = location
-        self._database = database
+        self.__database = database
+        # save new record to db
 
     def getName(self) -> str:
         return self.__name
