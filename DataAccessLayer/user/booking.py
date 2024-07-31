@@ -1,5 +1,7 @@
 from user import User
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
+
+
 class Booking:
     def __init__(self, user: User, duration: int, parkingSlot: ParkingSlot):
         self.__isLateCheckOut = False
@@ -18,14 +20,12 @@ class Booking:
     def getParkingSlot(self) -> ParkingSlot:
         return self._parkingSlot
 
-
     def isPaymentSuccessful(self) -> bool:
         return self.__isPaymentSuccessful
 
     def setPaymentStatus(self, status: bool) -> None:
         __isPaymentSuccessful = status
 
-    
     def isCheckInSuccessful(self) -> bool:
         return self.__isCheckInSuccessful
 

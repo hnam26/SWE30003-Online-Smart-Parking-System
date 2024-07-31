@@ -1,10 +1,11 @@
-from payment.payment import Payment
+from payment import Payment
+
 
 class Visa(Payment):
     def __init__(self, amount: int):
         super().__init__(amount)
 
-    def process_payment(self) -> bool:
+    def processPayment(self, **kwargs) -> bool:
         # Process the payment using the visa card
         # fee: 1
         return True

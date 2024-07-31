@@ -21,7 +21,7 @@ class UserServices:
 
         booking = Booking(user, duration, parkingSlot)
         bookingServices = BookingServices()
-        bookingServices.makePayment(booking, user.getPayment())
+        bookingServices.makePayment(booking, user.getPaymentMethod())
         if booking.isPaymentSuccessful():
             user.addBooking(booking)
             # add Booking record to db

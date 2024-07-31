@@ -5,8 +5,10 @@ from DataAccessLayer.parking.parkingSlot import ParkingSlot
 from DataAccessLayer.payment.payment import Payment
 from vehicle import Vehicle
 
+
 class User:
-    def __init__(self, username: str, password: str, firstName: str, lastName: str, email: str, phone: str, dob: str, vehicle: List[Vehicle], booking: List[Booking, None], payment : Payment):
+    def __init__(self, username: str, password: str, firstName: str, lastName: str, email: str, phone: str, dob: str,
+                 vehicle: List[Vehicle], booking: List[Booking, None], payment: Payment):
         self.__username = username
         self.__password = password
         self._firstName = firstName
@@ -18,19 +20,22 @@ class User:
         self._booking = booking
         self._payment = payment
 
-    def validateEmail(self, email: str) -> str:
+    @staticmethod
+    def validateEmail(email: str) -> str:
         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         if not re.match(email_regex, email):
             raise ValueError("Invalid email address")
         return email
 
-    def validatePhone(self, phone: str) -> str:
+    @staticmethod
+    def validatePhone(phone: str) -> str:
         phone_regex = r'^\d{10}$'
         if not re.match(phone_regex, phone):
             raise ValueError("Invalid phone number")
         return phone
 
-    def validateDob(self, dob: str) -> str:
+    @staticmethod
+    def validateDob(dob: str) -> str:
         dob_regex = r'^(0[1-9]|[12][0-9]|3[01])-/.-/.\d\d$'
         if not re.match(dob_regex, dob):
             raise ValueError("Invalid date of birth")
@@ -89,16 +94,11 @@ class User:
 
     def getBookings(self) -> List[Booking, None]:
         return self._booking
-    
-    def makeBooking(self, duration: int, parkingSlot: ParkingSlot) -> Booking:
-        if not parkingSlot.getIsAvailable():
-            return "Parking slot is not available"
-        booking = Booking(duration, parkingSlot)       
-        booking.makePayment(self._payment)
-        if booking.isPaymentSuccessful():
-            self._booking.append(booking)
-            return booking
-        return None
 
+    def addBooking(self, booking: Booking):
+        self._booking.append(booking)
+    
+    def getPaymentMethod(self) -> Payment:
+        return self._payment
         
-        
+
