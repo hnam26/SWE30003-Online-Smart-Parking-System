@@ -1,15 +1,12 @@
 from parkingSlot import ParkingSlot
 from typing import List
-from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
 
 class ParkingLot:
-    def __init__(self, name: str, slots: List[ParkingSlot], location: str, database: DatabaseAccess):
+    def __init__(self, name: str, slots: List[ParkingSlot], location: str):
         self.__name = name
         self.__slots = slots
         self.__location = location
-        self.__database = database
-        # save new record to db
 
     def getName(self) -> str:
         return self.__name
@@ -29,3 +26,5 @@ class ParkingLot:
     def setLocation(self, location: str):
         self.__location = location
 
+    def getAllAvailableSlots(self) -> List[ParkingSlot]:
+        return [slot for slot in self.__slots if slot.getIsAvailable()]

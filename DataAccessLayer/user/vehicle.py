@@ -1,11 +1,9 @@
-from DataAccessLayer.utils.typesOfVehicle import TypesOfVehicle
-from DataAccessLayer.database.databaseAccess import DatabaseAccess
+from utils.typesOfVehicle import TypesOfVehicle
 
 class Vehicle:
-    def __init__(self, license : str, vehicleType : TypesOfVehicle, database: DatabaseAccess):
+    def __init__(self, license : str, vehicleType : TypesOfVehicle):
         self.__license = license
         self.__vehicleType = vehicleType
-        self.__database = database
 
     def __str__(self) -> str:
         return f"This is a car with:\nLicense: {self.getLicense()}\nType: {self.getVehicleType()}"
