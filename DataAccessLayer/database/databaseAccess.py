@@ -9,7 +9,7 @@ class DatabaseAccess:
     _instance = None
     _lock = threading.Lock()
 
-    def __new__(cls, connection_string):
+    def __new__(cls, connection_string='mysql+mysqlconnector://root:*Sinh08062004*@localhost/OSPS'):
         with cls._lock:
             if cls._instance is None:
                 cls._instance = super(DatabaseAccess, cls).__new__(cls)

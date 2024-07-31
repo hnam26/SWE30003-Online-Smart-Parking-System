@@ -1,7 +1,6 @@
 import re
 from typing import List
 from booking import Booking
-from DataAccessLayer.parking.parkingSlot import ParkingSlot
 from DataAccessLayer.payment.payment import Payment
 from vehicle import Vehicle
 
