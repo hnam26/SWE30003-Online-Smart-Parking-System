@@ -21,13 +21,7 @@ class Booking:
     
     def getParkingSlot(self) -> ParkingSlot:
         return self._parkingSlot
-    
-    def calculateFee(self) -> int:
-        # Calculate the fee based on the duration
-        # Fee is $10 per hour
-        if self.__isLateCheckOut:
-            return self._duration * 10 + 10
-        return self._duration * 10
+
 
     def makePayment(self, payment: Payment) -> bool:
         # Make payment using the payment method
@@ -62,13 +56,11 @@ class Booking:
     def isCheckInSuccessful(self) -> bool:
         return self.__isCheckInSuccessful
     
-    def checkLateCheckOut(self) -> bool:
+    def isLateCheckOut(self) -> bool:
         # query database for start time of booking, compare with current time
         # if current time - start time > duration, return True
         # else call calculateFee() and makePayment() with the additional fee
-
-        pass
-
+        return self.__isLateCheckOut
     
     def checkOut(self):
         # if self.validateCheckoutConditions():

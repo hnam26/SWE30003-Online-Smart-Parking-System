@@ -201,6 +201,3 @@ def main():
             print("Invalid choice. Please try again.")
 
     db.close()
-
-if __name__ == "__main__":
-    main()
