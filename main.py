@@ -1,4 +1,4 @@
-from database.databaseAccess import DatabaseAccess
+from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
 def main():
     # Database connection string
