@@ -1,1 +1,35 @@
+# Operating system generated
+.DS_Store
+Thumbs.db
+
+# IDE files
 .idea
+*.iml
+*.suo
+*.cache
+*.user
+
+# Build artifacts
+build/
+dist/
+*.jar
+*.war
+*.ear
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*pytest_cache/
+
+# Test results
+test-results/
+coverage/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.swp
+*~
