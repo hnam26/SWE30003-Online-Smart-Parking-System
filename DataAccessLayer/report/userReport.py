@@ -1,4 +1,4 @@
-from Report import Report
+from report import Report
 
 class UserReport(Report):
     def __init__(self, title, user_data):
