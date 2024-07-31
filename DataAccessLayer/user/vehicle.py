@@ -1,4 +1,4 @@
-from utils.typesOfVehicle import TypesOfVehicle
+from DataAccessLayer.utils.typesOfVehicle import TypesOfVehicle
 
 class Vehicle:
     def __init__(self, license : str, vehicleType : TypesOfVehicle):
