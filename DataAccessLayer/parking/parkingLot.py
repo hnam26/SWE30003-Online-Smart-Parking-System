@@ -1,6 +1,6 @@
 from parkingSlot import ParkingSlot
 from typing import List
-from database.databaseAccess import DatabaseAccess
+from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
 
 class ParkingLot:

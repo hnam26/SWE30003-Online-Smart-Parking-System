@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from database.databaseAccess import DatabaseAccess
+from DataAccessLayer.database.databaseAccess import DatabaseAccess
 class Payment(ABC):
   def __init__(self, amount: int, database: DatabaseAccess):
     self.__amount = amount

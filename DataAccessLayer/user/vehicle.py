@@ -1,5 +1,5 @@
-from utils.typesOfVehicle import TypesOfVehicle
-from database.databaseAccess import DatabaseAccess
+from DataAccessLayer.utils.typesOfVehicle import TypesOfVehicle
+from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
 class Vehicle:
     def __init__(self, license : str, vehicleType : TypesOfVehicle, database: DatabaseAccess):

@@ -1,6 +1,8 @@
 from vehicle import Vehicle
-from utils.typesOfVehicle import TypesOfVehicle
+from DataAccessLayer.utils.typesOfVehicle import TypesOfVehicle
 from user import User
+
+
 def main():
     # Create a car with 4 seats
     car1 = Vehicle("1234", TypesOfVehicle.fourSeats)
@@ -12,5 +14,7 @@ def main():
     # user = User("username", "password", "firstName", "lastName", "email", "phone", "dob")
 
     # print(user._firstName)
+
+
 if __name__ == "__main__":
     main()
