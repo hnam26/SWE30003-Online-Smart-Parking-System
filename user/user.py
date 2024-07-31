@@ -3,11 +3,10 @@ from typing import List
 from booking import Booking
 from parking.parkingSlot import ParkingSlot
 from payment.payment import Payment
-from database.databaseAccess import DatabaseAccess
 from vehicle import Vehicle
 
 class User:
-    def __init__(self, username: str, password: str, firstName: str, lastName: str, email: str, phone: str, dob: str, vehicle: List[Vehicle], booking: List[Booking, None], payment : Payment, database: DatabaseAccess):
+    def __init__(self, username: str, password: str, firstName: str, lastName: str, email: str, phone: str, dob: str, vehicle: List[Vehicle], booking: List[Booking, None], payment : Payment):
         self.__username = username
         self.__password = password
         self._firstName = firstName
@@ -18,7 +17,6 @@ class User:
         self._vehicle = vehicle
         self._booking = booking
         self._payment = payment
-        self._database = database
 
     def validateEmail(self, email: str) -> str:
         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'

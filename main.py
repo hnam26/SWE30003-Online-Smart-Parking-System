@@ -1,16 +1,18 @@
-from vehicle import Vehicle
-from utils.typesOfVehicle import TypesOfVehicle
-from user import User
-def main():
-    # Create a car with 4 seats
-    car1 = Vehicle("1234", TypesOfVehicle.fourSeats)
-    print(car1)
-    # Create a car with 7 seats
-    car2 = Vehicle("5678", TypesOfVehicle.sevenSeats)
-    print(car2)
-    
-    # user = User("username", "password", "firstName", "lastName", "email", "phone", "dob")
+from database.databaseAccess import DatabaseAccess
 
-    # print(user._firstName)
+def main():
+    # Database connection string
+    connection_string = 'mysql+mysqlconnector://root:*Sinh08062004*@localhost/OSPS'
+    
+    # Initialize DatabaseAccess
+    db_access = DatabaseAccess(connection_string)
+    
+    # Create a session to interact with the database
+    session = db_access.getSession()
+    db_access.queryMenu()
+    
+    # Close the session
+    session.close()
+
 if __name__ == "__main__":
     main()

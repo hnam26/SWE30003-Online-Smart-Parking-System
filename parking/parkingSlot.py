@@ -1,7 +1,5 @@
-from database.databaseAccess import DatabaseAccess
-
 class ParkingSlot:
-    def __init__(self, location: str, isAvailable: bool, database: DatabaseAccess):
+    def __init__(self, location: str, isAvailable: bool):
         self.__location = location
         self.__isAvailable = isAvailable
 

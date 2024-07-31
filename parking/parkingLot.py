@@ -1,14 +1,12 @@
 from parkingSlot import ParkingSlot
 from typing import List
-from database.databaseAccess import DatabaseAccess
 
 
 class ParkingLot:
-    def __init__(self, name: str, slots: List[ParkingSlot], location: str, database: DatabaseAccess):
+    def __init__(self, name: str, slots: List[ParkingSlot], location: str):
         self.__name = name
         self.__slots = slots
         self.__location = location
-        self._database = database
 
     def getName(self) -> str:
         return self.__name

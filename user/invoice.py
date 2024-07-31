@@ -1,9 +1,7 @@
 from payment.payment import Payment
-from database.databaseAccess import DatabaseAccess
 class Invoice:
-  def __init__(self, payment: Payment, database: DatabaseAccess):
+  def __init__(self, payment: Payment):
     self._payment = payment
-    self._database = database
 
   def generateInvoice(self):
     fee = self._payment.getAmount()
