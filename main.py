@@ -1,3 +1,4 @@
+import BusinessLogic
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
 def main():
