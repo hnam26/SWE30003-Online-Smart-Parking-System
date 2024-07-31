@@ -1,9 +1,7 @@
 from DataAccessLayer.payment.payment import Payment
-from DataAccessLayer.database.databaseAccess import DatabaseAccess
 class Invoice:
-  def __init__(self, payment: Payment, database: DatabaseAccess):
+  def __init__(self, payment: Payment):
     self._payment = payment
-    self.__database = database
 
   def generateInvoice(self):
     fee = self._payment.getAmount()

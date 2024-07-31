@@ -1,10 +1,8 @@
 from abc import ABC, abstractmethod
-from DataAccessLayer.database.databaseAccess import DatabaseAccess
+
 class Payment(ABC):
-  def __init__(self, amount: int, database: DatabaseAccess):
+  def __init__(self, amount: int):
     self.__amount = amount
-    self.__database = database
-    # save new record to db
 
   @abstractmethod
   def processPayment(self, booking, amount) -> bool:
