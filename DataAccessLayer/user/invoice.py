@@ -1,5 +1,5 @@
-from payment.payment import Payment
-from database.databaseAccess import DatabaseAccess
+from DataAccessLayer.payment.payment import Payment
+from DataAccessLayer.database.databaseAccess import DatabaseAccess
 class Invoice:
   def __init__(self, payment: Payment, database: DatabaseAccess):
     self._payment = payment

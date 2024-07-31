@@ -1,4 +1,4 @@
-from database.databaseAccess import DatabaseAccess
+from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
 class ParkingSlot:
     def __init__(self, location: str, isAvailable: bool, database: DatabaseAccess):
