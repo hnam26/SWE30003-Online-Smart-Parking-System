@@ -1,5 +1,6 @@
 from user import User
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
+
 class Booking:
     def __init__(self, user: User, duration: int, parkingSlot: ParkingSlot):
         self.__isLateCheckOut = False
