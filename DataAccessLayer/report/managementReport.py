@@ -1,46 +1,48 @@
+from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.report.report import Report
 from sqlalchemy import text
 
+
 class ManagementReport(Report):
-    def __init__(self, db_instance):
+    def __init__(self):
         super().__init__()
+        self.__db = DatabaseAccess()
         self.db = db_instance
 
     def generateReport(self):
         session = self.db.getSession()
         try:
             # Query for total revenue
-            revenue_query = text("SELECT SUM(amount) as total_revenue FROM Payment")
-            revenue_result = session.execute(revenue_query).scalar()
+            revenueResult = session.execute(revenueQuery).scalar()
+            revenueQuery = text("SELECT SUM(amount) as total_revenue FROM Payment")
 
             # Query for slot availability
-            occupied_slots_query = text("SELECT COUNT(*) FROM ParkingSlot WHERE is_available = FALSE")
-            occupied_slots_result = session.execute(occupied_slots_query).scalar()
+            occupiedSlotsQuery = text("SELECT COUNT(*) FROM ParkingSlot WHERE is_available = FALSE")
+            occupiedSlotsResult = session.execute(occupiedSlotsQuery).scalar()
 
-            available_slots_query = text("SELECT COUNT(*) FROM ParkingSlot WHERE is_available = TRUE")
-            available_slots_result = session.execute(available_slots_query).scalar()
+            availableSlotsQuery = text("SELECT COUNT(*) FROM ParkingSlot WHERE is_available = TRUE")
+            availableSlotsResult = session.execute(availableSlotsQuery).scalar()
 
             # Query for revenue details
-            revenue_details_query = text("SELECT payment_date, amount FROM Payment")
-            revenue_details_result = session.execute(revenue_details_query).mappings().all()
-            revenue_details = [dict(detail) for detail in revenue_details_result]
+            revenueDetailsQuery = text("SELECT payment_date, amount FROM Payment")
+            revenueDetailsResult = session.execute(revenueDetailsQuery).mappings().all()
+            revenueDetails = [dict(detail) for detail in revenueDetailsResult]
 
             # Query for booking trends
-            booking_trends_query = text("SELECT start_time FROM Booking")
-            booking_trends_result = session.execute(booking_trends_query).mappings().all()
-            booking_trends = [dict(trend) for trend in booking_trends_result]
+            bookingTrendsQuery = text("SELECT start_time FROM Booking")
+            bookingTrendsResult = session.execute(bookingTrendsQuery).mappings().all()
+            bookingTrends = [dict(trend) for trend in bookingTrendsResult]
 
-            revenue_stats = f"Total Revenue: {revenue_result}\nRevenue Details:\n" + "\n".join(
-                [f"{detail['payment_date']}: {detail['amount']}" for detail in revenue_details]) + "\n"
-            booking_trends_stats = "Booking Trends:\n" + "\n".join(
-                [f"{trend['start_time']}" for trend in booking_trends]) + "\n"
+            revenueStats = f"Total Revenue: {revenueResult}\nRevenue Details:\n" + "\n".join(
+                [f"{detail['payment_date']}: {detail['amount']}" for detail in revenueDetails]) + "\n"
+            bookingTrendsStats = "Booking Trends:\n" + "\n".join(
+                [f"{trend['start_time']}" for trend in bookingTrends]) + "\n"
 
-            self.content = f"Occupied Slots: {occupied_slots_result}\nAvailable Slots: {available_slots_result}\n" + revenue_stats + booking_trends_stats
+            content = (f"Occupied Slots: {occupiedSlotsResult}\nAvailable Slots: {availableSlotsResult}\n" +
+                       revenueStats + bookingTrendsStats)
         except Exception as e:
-            self.content = f"An error occurred: {e}"
+            content = f"An error occurred: {e}"
         finally:
             session.close()
 
-    def printReport(self):
-        self.generateReport()
-        print(self.content)
+        return content

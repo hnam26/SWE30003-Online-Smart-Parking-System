@@ -3,34 +3,34 @@ from DataAccessLayer.report.managementReport import ManagementReport
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
 class ReportFactory:
-    _db_instance = None  # Class variable to hold the database instance
+    _dbInstance = None  # Class variable to hold the database instance
 
     @staticmethod
-    def initialize_database(connection_string):
+    def initialize_database(connectionString):
         """Initialize the database instance."""
-        if ReportFactory._db_instance is None:
-            ReportFactory._db_instance = DatabaseAccess(connection_string)
+        if ReportFactory._dbInstance is None:
+            ReportFactory._dbInstance = DatabaseAccess(connectionString)
         else:
             raise ValueError("Database has already been initialized.")
 
     @staticmethod
-    def create_report(report_type):
+    def create_report(reportType):
         """Create a report object based on the report type."""
-        if ReportFactory._db_instance is None:
+        if ReportFactory._dbInstance is None:
             raise ValueError("Database has not been initialized. Call initialize_database() first.")
         
-        if report_type.lower() == "user":
-            return UserReport(ReportFactory._db_instance)
-        elif report_type.lower() == "management":
-            return ManagementReport(ReportFactory._db_instance)
+        if reportType.lower() == "user":
+            return UserReport(ReportFactory._dbInstance)
+        elif reportType.lower() == "management":
+            return ManagementReport(ReportFactory._dbInstance)
         else:
-            raise ValueError(f"Unknown report type: {report_type}")
+            raise ValueError(f"Unknown report type: {reportType}")
 
     @staticmethod
-    def generate_and_print_report(report_type, user_id=None):
+    def generate_and_print_report(reportType, user_id=None):
         """Generate and print the specified report."""
-        report = ReportFactory.create_report(report_type)
-        if report_type.lower() == "user" and user_id is not None:
+        report = ReportFactory.create_report(reportType)
+        if reportType.lower() == "user" and user_id is not None:
             report.printReport(user_id)
         else:
             report.printReport()
