@@ -2,11 +2,9 @@ import BusinessLogic
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
 def main():
-    # Database connection string
-    connection_string = 'mysql+mysqlconnector://root:*Sinh08062004*@localhost/OSPS'
     
     # Initialize DatabaseAccess
-    db_access = DatabaseAccess(connection_string)
+    db_access = DatabaseAccess()
     
     # Create a session to interact with the database
     session = db_access.getSession()

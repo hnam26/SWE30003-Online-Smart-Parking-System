@@ -1,4 +1,4 @@
-from payment.payment import Payment
+from payment import Payment
 
 class Master(Payment):
     def __init__(self, amount: int):
