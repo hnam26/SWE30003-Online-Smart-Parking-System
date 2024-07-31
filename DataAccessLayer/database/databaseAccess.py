@@ -182,7 +182,7 @@ class DatabaseAccess:
             print(f"An error occurred while executing the query: {e}")
 
 def main():
-    connectionString = 'mysql+mysqlconnector://root:*Sinh08062004*@localhost/OSPS'
+    connectionString = 'mysql+mysqlconnector://root:12345@localhost/OSPS'
     db = DatabaseAccess(connectionString)
     
     while True:

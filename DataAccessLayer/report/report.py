@@ -1,19 +1,16 @@
 from abc import ABC, abstractmethod
 
 class Report(ABC):
-    def __init__(self, title):
-        self.title = title
+    def __init__(self):
         self.content = ""
 
-    def getTitle(self):
-        return self.title
-
-    def getContent(self):
+    def get_content(self):
         return self.content
 
     @abstractmethod
-    def generateReport(self):
+    def generate_report(self):
         pass
 
-    def formatReport(self):
-        return f"Title: {self.title}\nContent: {self.content}"
+    @abstractmethod
+    def print_report(self):
+        pass
