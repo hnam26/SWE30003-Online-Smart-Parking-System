@@ -15,9 +15,9 @@ class User(Base):
     email = Column(String(100), unique=True, nullable=False)
     phone = Column(String(10), nullable=False)
     dob = Column(Date, nullable=False)
-    vehicles = relationship('Vehicle', back_populates='personal')
-    bookings = relationship('Booking', back_populates='personal')
-    payments = relationship('Payment', back_populates='personal')
+    vehicles = relationship('Vehicle', back_populates='user')
+    bookings = relationship('Booking', back_populates='user')
+    payments = relationship('Payment', back_populates='user')
 
 class Vehicle(Base):
     __tablename__ = 'Vehicle'
@@ -60,6 +60,7 @@ class Payment(Base):
     __tablename__ = 'Payment'
     payment_id = Column(Integer, primary_key=True, autoincrement=True)
     booking_id = Column(Integer, ForeignKey('Booking.booking_id'), nullable=False, unique=True)
+    user_id = Column(Integer, ForeignKey('User.user_id'), nullable=False)
     payment_method = Column(String(50), nullable=False)
     amount = Column(DECIMAL(10, 2), nullable=False)
     payment_date = Column(DateTime, nullable=False)

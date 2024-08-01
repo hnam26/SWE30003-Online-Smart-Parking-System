@@ -62,7 +62,7 @@ def main():
         elif choice == "2":
             while True:
                 newUser = userServices.register(input("First Name: "), input("Last Name: "), input("Email: "),
-                                                input("Phone Number"), input("Date of Birth: "),
+                                                input("Phone Number: "), input("Date of Birth: "),
                                                 input("Username: "), input("Password: "))
 
                 if not newUser:
