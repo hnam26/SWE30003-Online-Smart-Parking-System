@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
 
+
 class User(Base):
     __tablename__ = 'User'
     user_id = Column(Integer, primary_key=True, autoincrement=True)
@@ -62,6 +63,7 @@ class Payment(Base):
     payment_method = Column(String(50), nullable=False)
     amount = Column(DECIMAL(10, 2), nullable=False)
     payment_date = Column(DateTime, nullable=False)
+    user = relationship('User', back_populates='payments')
     booking = relationship('Booking', back_populates='payment')
     invoice = relationship('Invoice', uselist=False, back_populates='payment')
 
