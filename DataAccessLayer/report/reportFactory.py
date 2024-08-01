@@ -6,7 +6,7 @@ class ReportFactory:
     _db_instance = None  # Class variable to hold the database instance
 
     @staticmethod
-    def initialize_database(connection_string):
+    def initialize_database(connection_string='mysql+mysqlconnector://root:*Sinh08062004*@localhost/OSPS'):
         """Initialize the database instance."""
         if ReportFactory._db_instance is None:
             ReportFactory._db_instance = DatabaseAccess(connection_string)

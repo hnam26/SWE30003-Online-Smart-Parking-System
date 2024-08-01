@@ -1,9 +1,10 @@
-from user import User
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .user import User
 
 class Booking:
-    def __init__(self, user: User, duration: int, parkingSlot: ParkingSlot):
+    def __init__(self, user: 'User', duration: int, parkingSlot: ParkingSlot):
         self.__isLateCheckOut = False
         self._user = user
         self._duration = duration
@@ -11,7 +12,7 @@ class Booking:
         self.__isPaymentSuccessful = False
         self.__isCheckInSuccessful = False
 
-    def getUser(self) -> User:
+    def getUser(self) -> 'User':
         return self._user
     
     def getDuration(self) -> int:

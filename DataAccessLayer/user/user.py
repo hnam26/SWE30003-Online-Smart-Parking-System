@@ -1,13 +1,14 @@
 import re
-from typing import List
-from booking import Booking
-from DataAccessLayer.payment.payment import Payment
-from vehicle import Vehicle
+from typing import List, Union, TYPE_CHECKING
+if TYPE_CHECKING:
+    from .booking import Booking
+    from .vehicle import Vehicle
+    from DataAccessLayer.payment.payment import Payment
 
 
 class User:
     def __init__(self, username: str, password: str, firstName: str, lastName: str, email: str, phone: str, dob: str,
-                 vehicle: List[Vehicle], booking: List[Booking, None], payment: Payment):
+                 vehicle: List['Vehicle']=None, booking: List[Union['Booking', None]]=None, payment:'Payment'=None):
         self.__username = username
         self.__password = password
         self._firstName = firstName
@@ -35,7 +36,7 @@ class User:
 
     @staticmethod
     def validateDob(dob: str) -> str:
-        dob_regex = r'^(0[1-9]|[12][0-9]|3[01])-/.-/.\d\d$'
+        dob_regex = r'^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$'
         if not re.match(dob_regex, dob):
             raise ValueError("Invalid date of birth")
         return dob
@@ -85,19 +86,19 @@ class User:
     def setDob(self, dob: str):
         self._dob = self.validateDob(dob)
 
-    def getVehicles(self) -> List[Vehicle]:
+    def getVehicles(self) -> List['Vehicle']:
         return self._vehicle
     
-    def addVehicle(self, vehicle: Vehicle):
+    def addVehicle(self, vehicle: 'Vehicle'):
         self._vehicle.append(vehicle)
 
-    def getBookings(self) -> List[Booking, None]:
+    def getBookings(self) -> List[Union['Booking', None]]:
         return self._booking
 
-    def addBooking(self, booking: Booking):
+    def addBooking(self, booking: 'Booking'):
         self._booking.append(booking)
     
-    def getPaymentMethod(self) -> Payment:
+    def getPaymentMethod(self) -> 'Payment':
         return self._payment
         
 
