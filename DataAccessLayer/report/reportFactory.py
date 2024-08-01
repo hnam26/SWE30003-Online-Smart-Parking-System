@@ -2,6 +2,7 @@ from DataAccessLayer.report.userReport import UserReport
 from DataAccessLayer.report.managementReport import ManagementReport
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 
+
 class ReportFactory:
     _dbInstance = None  # Class variable to hold the database instance
 
@@ -19,7 +20,7 @@ class ReportFactory:
         if ReportFactory._dbInstance is None:
             raise ValueError("Database has not been initialized. Call initialize_database() first.")
         
-        if reportType.lower() == "user":
+        if reportType.lower() == "personal":
             return UserReport(ReportFactory._dbInstance)
         elif reportType.lower() == "management":
             return ManagementReport(ReportFactory._dbInstance)
@@ -30,23 +31,23 @@ class ReportFactory:
     def generate_and_print_report(reportType, user_id=None):
         """Generate and print the specified report."""
         report = ReportFactory.create_report(reportType)
-        if reportType.lower() == "user" and user_id is not None:
+        if reportType.lower() == "personal" and user_id is not None:
             report.printReport(user_id)
         else:
             report.printReport()
 
     @staticmethod
     def run_report_generation():
-        """Method to handle user input and generate reports."""
+        """Method to handle personal input and generate reports."""
         try:
-            # Get the user ID from the user input
-            user_id = int(input("Enter the user ID for the user report: "))
+            # Get the personal ID from the personal input
+            user_id = int(input("Enter the personal ID for the personal report: "))
 
-            # Generate and print user report
+            # Generate and print personal report
             print("\nUser Report:")
-            ReportFactory.generate_and_print_report("user", user_id)
+            ReportFactory.generate_and_print_report("personal", user_id)
         except ValueError:
-            print("Invalid user ID. Please enter a valid number.")
+            print("Invalid personal ID. Please enter a valid number.")
         except Exception as e:
             print(f"An error occurred: {e}")
 

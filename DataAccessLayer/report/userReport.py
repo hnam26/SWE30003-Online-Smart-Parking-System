@@ -9,7 +9,7 @@ class UserReport(Report):
     def generateReport(self, user_id):
         session = self.db.getSession()
         try:
-            # Query for user data
+            # Query for personal data
             user_query = text("SELECT * FROM User WHERE user_id = :user_id")
             user_result = session.execute(user_query, {'user_id': user_id}).mappings().first()
 

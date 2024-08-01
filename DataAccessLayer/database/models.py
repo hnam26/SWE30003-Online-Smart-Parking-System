@@ -14,9 +14,9 @@ class User(Base):
     email = Column(String(100), unique=True, nullable=False)
     phone = Column(String(10), nullable=False)
     dob = Column(Date, nullable=False)
-    vehicles = relationship('Vehicle', back_populates='user')
-    bookings = relationship('Booking', back_populates='user')
-    payments = relationship('Payment', back_populates='user')
+    vehicles = relationship('Vehicle', back_populates='personal')
+    bookings = relationship('Booking', back_populates='personal')
+    payments = relationship('Payment', back_populates='personal')
 
 class Vehicle(Base):
     __tablename__ = 'Vehicle'
