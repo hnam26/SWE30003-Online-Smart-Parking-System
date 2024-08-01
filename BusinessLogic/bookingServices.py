@@ -2,7 +2,7 @@ from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.user.booking import Booking
 from DataAccessLayer.payment.payment import Payment
 from DataAccessLayer.user.invoice import Invoice
-from invoiceServices import InvoiceServices
+from .invoiceServices import InvoiceServices
 
 
 class BookingServices:
@@ -18,15 +18,43 @@ class BookingServices:
         return booking.getDuration() * 10
 
     def makePayment(self, booking: Booking, payment: Payment) -> bool:
-        paymentStatus = payment.processPayment(booking, self.calculateFee(booking))
-        booking.setPaymentStatus(paymentStatus)
+        session = self.__db.getSession()
+        try:
+            fee = self.calculateFee(booking)
+            # payment = Payment(booking=booking, payment_method=paymentMethod, amount=fee, payment_date=datetime.now())
+            paymentStatus = payment.processPayment(booking, fee)
+            booking.setPaymentStatus(paymentStatus)
 
-        if not booking.isPaymentSuccessful():
+            if not booking.isPaymentSuccessful():
+                return False
+
+            booking.getParkingSlot().setIsAvailable(False)
+            invoiceServices = InvoiceServices()
+            invoiceCreated = invoiceServices.generateInvoice(Invoice(payment=payment))
+
+            if invoiceCreated:
+                session.add(payment)
+                session.commit()
+                print("Payment record saved to the database.")
+                return True
+            else:
+                session.rollback()
+                return False
+        except Exception as e:
+            session.rollback()
+            print(f"An error occurred: {e}")
             return False
-
-        booking.getParkingSlot().setIsAvailable(False)
-        invoiceServices = InvoiceServices()
-        return invoiceServices.generateInvoice(Invoice(payment))
+        finally:
+            session.close()
+        # paymentStatus = payment.processPayment(booking, self.calculateFee(booking))
+        # booking.setPaymentStatus(paymentStatus)
+        #
+        # if not booking.isPaymentSuccessful():
+        #     return False
+        #
+        # booking.getParkingSlot().setIsAvailable(False)
+        # invoiceServices = InvoiceServices()
+        # return invoiceServices.generateInvoice(Invoice(payment))
 
     @staticmethod
     def checkIn(booking: Booking) -> bool:
