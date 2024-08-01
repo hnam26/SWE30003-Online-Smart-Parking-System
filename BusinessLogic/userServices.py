@@ -1,6 +1,6 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.user.booking import Booking
-from DataAccessLayer.user.user import User
+from DataAccessLayer.personal.booking import Booking
+from DataAccessLayer.personal.user import User
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
 from BusinessLogic.bookingServices import BookingServices
 
@@ -9,10 +9,10 @@ class UserServices:
     def __init__(self):
         self.__db = DatabaseAccess()
 
-    def save(self, user: User):
+    def save(self):
         session = self.__db.getSession()
         try:
-            session.add(user)
+            session.add(self)
             session.commit()
             print("User record saved to the database.")
         except Exception as e:
@@ -21,19 +21,11 @@ class UserServices:
         finally:
             session.close()
 
-    def register(self):
+    def register(self, firstName: str, lastName: str, email: str, phoneNumber: str, dob: str, username: str, password: str):
         while True:
             session = self.__db.getSession()
             try:
-                first_name = input("Enter your first name: ")
-                last_name = input("Enter your last name: ")
-                username = input("Enter your username: ")
-                email = input("Enter your email: ")
-                phone = input("Enter your phone number: ")
-                dob = input("Enter your date of birth: ")
-                password = input("Enter your password: ")
-
-                newUser = User(firstName=first_name, lastName=last_name, username=username, email=email, phone=phone,
+                newUser = User(firstName=firstName, lastName=lastName, username=username, email=email, phone=phoneNumber,
                                dob=dob, password=password)
                 session.add(newUser)
                 session.commit()
@@ -49,14 +41,11 @@ class UserServices:
             finally:
                 session.close()
 
-    def login(self, username: str, password: str) -> bool:
+    def login(self, username: str, password: str) -> [User, False]:
         session = self.__db.getSession()
         user = session.query(User).filter_by(username=username, password=password).first()
         session.close()
-        return user is not None
-
-    def logout(self):
-        return self.__db.logout()
+        return user or False
 
     def makeBooking(self, user: User, parkingSlot: ParkingSlot, duration: int) -> [Booking, bool]:
         session = self.__db.getSession()
