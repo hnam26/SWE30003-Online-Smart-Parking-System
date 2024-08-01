@@ -4,14 +4,15 @@ from DataAccessLayer.user.user import User
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
 from BusinessLogic.bookingServices import BookingServices
 
+
 class UserServices:
     def __init__(self):
         self.__db = DatabaseAccess()
 
-    def save(self):
+    def save(self, user: User):
         session = self.__db.getSession()
         try:
-            session.add(self)
+            session.add(user)
             session.commit()
             print("User record saved to the database.")
         except Exception as e:
@@ -32,11 +33,12 @@ class UserServices:
                 dob = input("Enter your date of birth: ")
                 password = input("Enter your password: ")
 
-                newUser = User(firstName=first_name, lastName=last_name, username=username, email=email, phone=phone, dob=dob, password=password)
+                newUser = User(firstName=first_name, lastName=last_name, username=username, email=email, phone=phone,
+                               dob=dob, password=password)
                 session.add(newUser)
                 session.commit()
                 print("User registered successfully!")
-                self.save()
+                self.save(newUser)
             except Exception as e:
                 session.rollback()
                 print(f"An error occurred: {e}")
