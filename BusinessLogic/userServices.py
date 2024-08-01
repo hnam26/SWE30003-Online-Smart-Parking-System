@@ -1,8 +1,11 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
+from DataAccessLayer.personal.booking import Booking
+from DataAccessLayer.personal.user import User
 from DataAccessLayer.user.booking import Booking
 from DataAccessLayer.user import user
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
 from BusinessLogic.bookingServices import BookingServices
+
 from DataAccessLayer.database import models
 
 
@@ -35,7 +38,7 @@ class UserServices:
         finally:
             session.close()
 
-    def register(self):
+    def register(self, firstName: str, lastName: str, email: str, phoneNumber: str, dob: str, username: str, password: str):
         while True:
             # first_name = input("Enter your first name: ")
             # last_name = input("Enter your last name: ")
@@ -60,8 +63,25 @@ class UserServices:
             if not result:
                 print("Exiting registration.")
                 break
+            session = self.__db.getSession()
+            try:
+                newUser = User(firstName=firstName, lastName=lastName, username=username, email=email, phone=phoneNumber,
+                               dob=dob, password=password)
+                session.add(newUser)
+                session.commit()
+                print("User registered successfully!")
+                self.save(newUser)
+            except Exception as e:
+                session.rollback()
+                print(f"An error occurred: {e}")
+                retry = input("Would you like to try again? (y/n): ").strip().lower()
+                if retry != 'y':
+                    print("Exiting registration.")
+                    break
+            finally:
+                session.close()
 
-    def login(self, username: str, password: str) -> bool:
+    def login(self, username: str, password: str) -> [User, False]:
         session = self.__db.getSession()
         user = session.query(models.User).filter_by(username=username, password=password).first()
         session.close()
