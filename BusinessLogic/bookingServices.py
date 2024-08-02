@@ -1,7 +1,6 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.personal.booking import Booking
 from DataAccessLayer.payment.payment import Payment
-from DataAccessLayer.personal.invoice import Invoice
 from .invoiceServices import InvoiceServices
 
 
@@ -30,7 +29,7 @@ class BookingServices:
 
             booking.getParkingSlot().setIsAvailable(False)
             invoiceServices = InvoiceServices()
-            invoiceCreated = invoiceServices.generateInvoice(Invoice(payment=payment))
+            invoiceCreated = invoiceServices.generateInvoice(payment.getInvoice())
 
             if invoiceCreated:
                 session.add(payment)

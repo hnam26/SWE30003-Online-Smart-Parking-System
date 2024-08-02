@@ -2,30 +2,31 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 import threading
 from tabulate import tabulate
-from .models import Base, User, Vehicle, ParkingLot, ParkingSlot, Booking, Payment, Invoice, ReportType, Report
+from .models import Base
 from datetime import datetime
 
+
 class DatabaseAccess:
-    _instance = None
-    _lock = threading.Lock()
+    __instance = None
+    __lock = threading.Lock()
 
     def __new__(cls, connection_string='mysql+mysqlconnector://root:*Sinh08062004*@localhost/OSPS'):
-        with cls._lock:
-            if cls._instance is None:
-                cls._instance = super(DatabaseAccess, cls).__new__(cls)
-                cls._instance.engine = create_engine(connection_string)
-                cls._instance.Session = sessionmaker(bind=cls._instance.engine)
+        with cls.__lock:
+            if cls.__instance is None:
+                cls.__instance = super(DatabaseAccess, cls).__new__(cls)
+                cls.__instance.engine = create_engine(connection_string)
+                cls.__instance.Session = sessionmaker(bind=cls.__instance.engine)
                 # Ensure the metadata is created using the imported Base
-                Base.metadata.create_all(cls._instance.engine)
+                Base.metadata.create_all(cls.__instance.engine)
                 print("Database connection established")
-            return cls._instance
+            return cls.__instance
 
     def getSession(self):
         return self.Session()
 
     def close(self):
-        if self._instance and self._instance.engine:
-            self._instance.engine.dispose()
+        if self.__instance and self.__instance.engine:
+            self.__instance.engine.dispose()
             print("Database connection closed")
 
     def queryMenu(self):
@@ -55,7 +56,8 @@ class DatabaseAccess:
             columns = result.keys()
             rows = []
             for row in result:
-                formattedRow = [value.strftime("%Y-%m-%d %H:%M:%S") if isinstance(value, datetime) else value for value in row]
+                formattedRow = [value.strftime("%Y-%m-%d %H:%M:%S") if isinstance(value, datetime) else value
+                                for value in row]
                 rows.append(formattedRow)
             print(tabulate(rows, headers=columns, tablefmt="grid"))
         except Exception as e:
