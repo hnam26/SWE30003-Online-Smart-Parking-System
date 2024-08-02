@@ -3,29 +3,30 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .user import User
 
+
 class Booking:
     def __init__(self, user: 'User', duration: int, parkingSlot: ParkingSlot):
         self.__isLateCheckOut = False
-        self._user = user
-        self._duration = duration
-        self._parkingSlot = parkingSlot
+        self.__user = user
+        self.__duration = duration
+        self.__parkingSlot = parkingSlot
         self.__isPaymentSuccessful = False
         self.__isCheckInSuccessful = False
 
     def getUser(self) -> 'User':
-        return self._user
+        return self.__user
     
     def getDuration(self) -> int:
-        return self._duration
+        return self.__duration
     
     def getParkingSlot(self) -> ParkingSlot:
-        return self._parkingSlot
+        return self.__parkingSlot
 
     def isPaymentSuccessful(self) -> bool:
         return self.__isPaymentSuccessful
 
     def setPaymentStatus(self, status: bool) -> None:
-        __isPaymentSuccessful = status
+        self.__isPaymentSuccessful = status
 
     def isCheckInSuccessful(self) -> bool:
         return self.__isCheckInSuccessful
