@@ -1,9 +1,7 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.personal.booking import Booking
 from DataAccessLayer.personal.user import User
 from DataAccessLayer.personal.booking import Booking
 from DataAccessLayer.personal import user
-from DataAccessLayer.personal import user as user_module
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
 from BusinessLogic.bookingServices import BookingServices
 from DataAccessLayer.database import models
@@ -29,9 +27,9 @@ class UserServices:
         while True:
             session = self.__db.getSession()
             try:
-                validatedUser = user_module.User(
-                    first_name=firstName,
-                    last_name=lastName,
+                validatedUser = User(
+                    firstName=firstName,
+                    lastName=lastName,
                     username=username,
                     email=email,
                     phone=phoneNumber,

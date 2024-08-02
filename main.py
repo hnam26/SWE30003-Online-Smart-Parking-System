@@ -17,8 +17,8 @@ def initialMenu():
 
 def functionsMenu(user: User):
     while True:
-        bookingServices = BookingServices()
-        invoiceServices = InvoiceServices()
+        # bookingServices = BookingServices()
+        # invoiceServices = InvoiceServices()
         print("What can we help you?")
         print("1. See All Available Parking Slots")
         print("2. Make Booking")
