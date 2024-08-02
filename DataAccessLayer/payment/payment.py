@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
+from DataAccessLayer.personal.invoice import Invoice
 
 
 class Payment(ABC):
     def __init__(self, amount: int):
         self.__amount = amount
+        self.__invoice = Invoice(self)
 
     @abstractmethod
     def processPayment(self, booking, amount) -> bool:
@@ -14,5 +16,8 @@ class Payment(ABC):
     """
         pass
 
-    def getAmount(self):
+    def getAmount(self) -> float:
         return self.__amount
+
+    def getInvoice(self) -> Invoice:
+        return self.__invoice

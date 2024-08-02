@@ -16,66 +16,72 @@ def initialMenu():
 
 
 def functionsMenu(user: User):
-    print("What can we help you?")
-    userServices = UserServices()
-    bookingServices = BookingServices()
-    invoiceServices = InvoiceServices()
+    while True:
+        bookingServices = BookingServices()
+        invoiceServices = InvoiceServices()
+        print("What can we help you?")
+        print("1. See All Available Parking Slots")
+        print("2. Make Booking")
+        print("3. Check In")
+        print("4. Check Out")
+        print("5. Exit")
+
+        choice = input("Enter your choice: ")
+        match choice:
+            case "1":
+                
+                break
+            case "2":
+                break
+            case "3":
+                break
+            case "4":
+                break
+            case "5":
+                print("Thank You")
+                break
+            case default:
+                print("Invalid Choice")
 
 
 def main():
-    # Đây là 2 phần code của report để em test thử nó chạy được chưa,
-    # khi mà mình có option để chọn print report thì có thể bỏ đoạn này vào.
-
-    # Initialize the ReportFactory with the database connection
-    # ReportFactory.initialize_database()
-    #
-    # # Run the report generation process
-    # ReportFactory.run_report_generation()
-
-    # Initialize DatabaseAccess
-    # db_access = DatabaseAccess()
-    #
-    # # Create a session to interact with the database
-    # session = db_access.getSession()
-    # user_service = UserServices()
-    # user_service.register()
-    # # db_access.queryMenu()
-    # # Close the session
-    # session.close()
     print("Welcome to Online Smart Parking System")
 
     while True:
         choice = initialMenu()
         userServices = UserServices()
+        match choice:
 
-        if choice == "1":
+            case "1":
 
-            while True:
-                user = userServices.login(input("Username: "), input("Password: "))
-                if user:
-                    print("Login Successful\n")
-                    functionsMenu(user)
+                while True:
+                    user = userServices.login(input("Username: "), input("Password: "))
+                    if user:
+                        print("Login Successful\n")
+                        functionsMenu(user)
+                        break
+                    else:
+                        print("Invalid Username or Password\n")
+                        break
+            case "2":
+                while True:
+                    newUser = userServices.register(input("First Name: "), input("Last Name: "), input("Email: "),
+                                                    input("Phone Number"), input("Date of Birth: "),
+                                                    input("Username: "), input("Password: "))
+
+                    if not newUser:
+                        print("Registration Failed\n")
+                        break
+
+                    print("Register Successful\n")
                     break
-                else:
-                    print("Invalid Username or Password\n")
-                    break
-        elif choice == "2":
-            while True:
-                newUser = userServices.register(input("First Name: "), input("Last Name: "), input("Email: "),
-                                                input("Phone Number"), input("Date of Birth: "),
-                                                input("Username: "), input("Password: "))
 
-                if not newUser:
-                    print("Registration Failed\n")
-                    break
-
-                print("Register Successful\n")
+            case "3":
+                print("Thank you for using Online Smart Parking System")
                 break
 
-        elif choice == "3":
-            break
-        else:
-            print("Invalid choice")
+            case default:
+                print("Invalid choice")
 
 
 if __name__ == "__main__":

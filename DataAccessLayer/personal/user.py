@@ -8,17 +8,18 @@ if TYPE_CHECKING:
 
 class User:
     def __init__(self, username: str, password: str, firstName: str, lastName: str, email: str, phone: str, dob: str,
-                 vehicle: List['Vehicle']=None, booking: List[Union['Booking', None]]=None, payment:'Payment'=None):
+                 vehicle: List['Vehicle'] = None, booking: List[Union['Booking', None]] = None,
+                 payment: 'Payment' = None):
         self.__username = username
         self.__password = password
-        self._firstName = firstName
-        self._lastName = lastName
-        self._email = self.validateEmail(email)
-        self._phone = self.validatePhone(phone)
-        self._dob = self.validateDob(dob) 
-        self._vehicle = vehicle
-        self._booking = booking
-        self._payment = payment
+        self.__firstName = firstName
+        self.__lastName = lastName
+        self.__email = self.validateEmail(email)
+        self.__phone = self.validatePhone(phone)
+        self.__dob = self.validateDob(dob)
+        self.__vehicle = vehicle
+        self.__booking = booking
+        self.__payment = payment
 
     @staticmethod
     def validateEmail(email: str) -> str:
@@ -54,51 +55,49 @@ class User:
         self.__password = password
 
     def getFirstName(self) -> str:
-        return self._firstName
+        return self.__firstName
     
     def setFirstName(self, firstName: str):
-        self._firstName = firstName
+        self.__firstName = firstName
 
     def getLastName(self) -> str:
-        return self._lastName
+        return self.__lastName
     
     def setLastName(self, lastName: str):
-        self._lastName = lastName
+        self.__lastName = lastName
 
     def getFullName(self) -> str:
-        return f"{self._firstName} {self._lastName}"
+        return f"{self.__firstName} {self.__lastName}"
     
     def getEmail(self) -> str:
-        return self._email
+        return self.__email
     
     def setEmail(self, email: str):
-        self._email = self.validateEmail(email)
+        self.__email = self.validateEmail(email)
 
     def getPhone(self) -> str:
-        return self._phone
+        return self.__phone
     
     def setPhone(self, phone: str):
-        self._phone = self.validatePhone(phone)
+        self.__phone = self.validatePhone(phone)
 
     def getDob(self) -> str:
-        return self._dob
+        return self.__dob
     
     def setDob(self, dob: str):
-        self._dob = self.validateDob(dob)
+        self.__dob = self.validateDob(dob)
 
     def getVehicles(self) -> List['Vehicle']:
-        return self._vehicle
+        return self.__vehicle
     
     def addVehicle(self, vehicle: 'Vehicle'):
-        self._vehicle.append(vehicle)
+        self.__vehicle.append(vehicle)
 
     def getBookings(self) -> List[Union['Booking', None]]:
-        return self._booking
+        return self.__booking
 
     def addBooking(self, booking: 'Booking'):
-        self._booking.append(booking)
+        self.__booking.append(booking)
     
     def getPaymentMethod(self) -> 'Payment':
-        return self._payment
-        
-
+        return self.__payment
