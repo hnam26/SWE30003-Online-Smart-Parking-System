@@ -80,10 +80,10 @@ class UserServices:
         finally:
             session.close()
 
-    def makeBooking(self, user: user.User, parkingSlot: models.ParkingSlot, duration: int) -> Union[Booking, False]:
+    def makeBooking(self, user: user.User, parkingSlot: ParkingSlot, duration: int) -> Union[Booking, False]:
         session = self.__db.getSession()
         try:
-            if not parkingSlot.is_available:
+            if not parkingSlot.getIsAvailable():
                 return False
 
             booking = Booking(user, duration, parkingSlot)
