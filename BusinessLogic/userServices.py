@@ -1,9 +1,11 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.personal.booking import Booking
 from DataAccessLayer.personal.user import User
+from DataAccessLayer.personal.booking import Booking
+from DataAccessLayer.personal import user
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
 from BusinessLogic.bookingServices import BookingServices
-
+from DataAccessLayer.database import models
+from typing import Union
 
 class UserServices:
     def __init__(self):
@@ -25,29 +27,49 @@ class UserServices:
         while True:
             session = self.__db.getSession()
             try:
-                newUser = User(firstName=firstName, lastName=lastName, username=username, email=email, phone=phoneNumber,
-                               dob=dob, password=password)
+                validatedUser = User(
+                    firstName=firstName,
+                    lastName=lastName,
+                    username=username,
+                    email=email,
+                    phone=phoneNumber,
+                    dob=dob,
+                    password=password
+                )
+                newUser = models.User(
+                    first_name=validatedUser.getFirstName(),
+                    last_name=validatedUser.getLastName(),
+                    username=validatedUser.getUsername(),
+                    email=validatedUser.getEmail(),
+                    phone=validatedUser.getPhone(),
+                    dob=validatedUser.getDob(),
+                    password=validatedUser.getPassword()
+                )
                 session.add(newUser)
                 session.commit()
                 print("User registered successfully!")
-                self.save(newUser)
+                return newUser
             except Exception as e:
                 session.rollback()
                 print(f"An error occurred: {e}")
                 retry = input("Would you like to try again? (y/n): ").strip().lower()
                 if retry != 'y':
                     print("Exiting registration.")
-                    break
+                    return None
             finally:
                 session.close()
 
-    def login(self, username: str, password: str) -> [User, False]:
+    
+    def login(self, username: str, password: str) -> Union[User, bool]:
         session = self.__db.getSession()
-        user = session.query(User).filter_by(username=username, password=password).first()
+        user = session.query(models.User).filter_by(username=username, password=password).first()
         session.close()
         return user or False
 
-    def makeBooking(self, user: User, parkingSlot: ParkingSlot, duration: int) -> [Booking, bool]:
+    def logout(self):
+        return self.__db.logout()
+
+    def makeBooking(self, user: user.User, parkingSlot: ParkingSlot, duration: int) -> Union[Booking, False]:
         session = self.__db.getSession()
         try:
             if not parkingSlot.getIsAvailable():

@@ -17,8 +17,8 @@ def initialMenu():
 
 def functionsMenu(user: User):
     while True:
-        bookingServices = BookingServices()
-        invoiceServices = InvoiceServices()
+        # bookingServices = BookingServices()
+        # invoiceServices = InvoiceServices()
         print("What can we help you?")
         print("1. See All Available Parking Slots")
         print("2. Make Booking")
@@ -66,7 +66,7 @@ def main():
             case "2":
                 while True:
                     newUser = userServices.register(input("First Name: "), input("Last Name: "), input("Email: "),
-                                                    input("Phone Number"), input("Date of Birth: "),
+                                                    input("Phone Number: "), input("Date of Birth: "),
                                                     input("Username: "), input("Password: "))
 
                     if not newUser:

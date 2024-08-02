@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from DataAccessLayer.personal.invoice import Invoice
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from DataAccessLayer.personal.invoice import Invoice
 
 class Payment(ABC):
     def __init__(self, amount: int):
@@ -19,5 +20,5 @@ class Payment(ABC):
     def getAmount(self) -> float:
         return self.__amount
 
-    def getInvoice(self) -> Invoice:
+    def getInvoice(self) -> 'Invoice':
         return self.__invoice

@@ -1,4 +1,5 @@
-import re
+import re, inspect
+from datetime import datetime
 from typing import List, Union, TYPE_CHECKING
 if TYPE_CHECKING:
     from .booking import Booking
@@ -37,10 +38,11 @@ class User:
 
     @staticmethod
     def validateDob(dob: str) -> str:
-        dob_regex = r'^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$'
-        if not re.match(dob_regex, dob):
+        dob_regex = r'^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$'
+        if not re.match(dob_regex, dob.strip()):
             raise ValueError("Invalid date of birth")
-        return dob
+        date = datetime.strptime(dob, "%d-%m-%Y").date()
+        return date.strftime("%Y-%m-%d")
 
     def getUsername(self) -> str:
         return self.__username
