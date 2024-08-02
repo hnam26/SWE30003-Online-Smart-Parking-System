@@ -69,6 +69,17 @@ class UserServices:
     def logout(self):
         return self.__db.logout()
 
+    def getParkingSlotByNumber(self, slot_number: str) -> Union[ParkingSlot, None]:
+        session = self.__db.getSession()
+        try:
+            parking_slot = session.query(models.ParkingSlot).filter_by(slot_number=slot_number).first()
+            return parking_slot
+        except Exception as e:
+            print(f"An error occurred while fetching the parking slot: {e}")
+            return None
+        finally:
+            session.close()
+
     def makeBooking(self, user: user.User, parkingSlot: ParkingSlot, duration: int) -> Union[Booking, False]:
         session = self.__db.getSession()
         try:

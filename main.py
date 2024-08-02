@@ -17,6 +17,7 @@ def initialMenu():
 
 def functionsMenu(user: User):
     while True:
+        userServices = UserServices()
         # bookingServices = BookingServices()
         # invoiceServices = InvoiceServices()
         print("What can we help you?")
@@ -32,7 +33,26 @@ def functionsMenu(user: User):
                 
                 break
             case "2":
-                break
+                while True:
+                    slot_number = input("Parking Slot: ")
+                    parking_slot = userServices.getParkingSlotByNumber(slot_number)
+                    if not parking_slot:
+                        print("Invalid Parking Slot Number\n")
+                        continue
+
+                    try:
+                        duration = int(input("Duration: "))
+                    except ValueError:
+                        print("Invalid Duration. Please enter a number.\n")
+                        continue
+
+                    booking = userServices.makeBooking(user, parking_slot, duration)
+                    if booking:
+                        print("Booking Successfully \n")
+                        break
+                    else:
+                        print("Booking Failed\n")
+                        break
             case "3":
                 break
             case "4":
@@ -57,7 +77,7 @@ def main():
                 while True:
                     user = userServices.login(input("Username: "), input("Password: "))
                     if user:
-                        print("Login Successful\n")
+                        print("Login Successful!\n")
                         functionsMenu(user)
                         break
                     else:
