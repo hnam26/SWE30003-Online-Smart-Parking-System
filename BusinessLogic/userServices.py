@@ -1,10 +1,9 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.personal.user import User
+from DataAccessLayer.personal.user import User, UserTable
 from DataAccessLayer.personal.booking import Booking
 from DataAccessLayer.personal import user
-from DataAccessLayer.parking.parkingSlot import ParkingSlot
+from DataAccessLayer.parking.parkingSlot import ParkingSlot, ParkingSlotTable
 from BusinessLogic.bookingServices import BookingServices
-from DataAccessLayer.database import models
 from typing import Union
 
 class UserServices:
@@ -36,7 +35,7 @@ class UserServices:
                     dob=dob,
                     password=password
                 )
-                newUser = models.User(
+                newUser = UserTable(
                     first_name=validatedUser.getFirstName(),
                     last_name=validatedUser.getLastName(),
                     username=validatedUser.getUsername(),
@@ -62,7 +61,7 @@ class UserServices:
     
     def login(self, username: str, password: str) -> Union[User, bool]:
         session = self.__db.getSession()
-        user = session.query(models.User).filter_by(username=username, password=password).first()
+        user = session.query(UserTable).filter_by(username=username, password=password).first()
         session.close()
         return user or False
 
@@ -72,7 +71,7 @@ class UserServices:
     def getParkingSlotByNumber(self, slot_number: str) -> Union[ParkingSlot, None]:
         session = self.__db.getSession()
         try:
-            parking_slot = session.query(models.ParkingSlot).filter_by(slot_number=slot_number).first()
+            parking_slot = session.query(ParkingSlotTable).filter_by(slot_number=slot_number).first()
             return parking_slot
         except Exception as e:
             print(f"An error occurred while fetching the parking slot: {e}")
