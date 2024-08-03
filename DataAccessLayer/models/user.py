@@ -1,13 +1,12 @@
 from sqlalchemy import Column, Integer, String, Date
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
+from .base import Base
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .booking import Booking
     from .vehicle import Vehicle
     from .payment import Payment
-
-Base = declarative_base()
 
 
 class User(Base):
@@ -23,3 +22,4 @@ class User(Base):
     vehicles = relationship('Vehicle', back_populates='user')
     bookings = relationship('Booking', back_populates='user')
     payments = relationship('Payment', back_populates='user')
+

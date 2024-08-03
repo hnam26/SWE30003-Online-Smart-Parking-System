@@ -1,12 +1,11 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
+from .base import Base
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .booking import Booking
     from .user import User
-
-Base = declarative_base()
 
 
 class Vehicle(Base):

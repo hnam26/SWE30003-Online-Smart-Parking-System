@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, DECIMAL
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
+from .base import Base
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -7,7 +8,6 @@ if TYPE_CHECKING:
     from .user import User
     from .invoice import Invoice
 
-Base = declarative_base()
 
 
 class Payment(Base):
