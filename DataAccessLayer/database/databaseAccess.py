@@ -1,15 +1,15 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import threading
-from DataAccessLayer.personal.user import UserTable
-from DataAccessLayer.personal.vehicle import VehicleTable
-from DataAccessLayer.personal.booking import BookingTable
-from DataAccessLayer.personal.invoice import InvoiceTable
-from DataAccessLayer.payment.payment import PaymentTable
-from DataAccessLayer.report.report import ReportTable
-from DataAccessLayer.report.reportFactory import ReportTypeTable
-from DataAccessLayer.parking.parkingLot import ParkingLotTable
-from DataAccessLayer.parking.parkingSlot import ParkingSlotTable
+from DataAccessLayer.models.user import User
+from DataAccessLayer.models.vehicle import Vehicle
+from DataAccessLayer.models.booking import Booking
+from DataAccessLayer.models.invoice import Invoice
+from DataAccessLayer.models.payment import Payment
+from DataAccessLayer.models.report import Report
+from DataAccessLayer.models.reportType import ReportType
+from DataAccessLayer.models.parkingLot import ParkingLot
+from DataAccessLayer.models.parkingSlot import ParkingSlot
 
 # Collect all Base classes
 from sqlalchemy.ext.declarative import declarative_base
@@ -18,15 +18,15 @@ Base = declarative_base()
 
 # List all the table classes
 table_classes = [
-    UserTable,
-    VehicleTable,
-    BookingTable,
-    PaymentTable,
-    InvoiceTable,
-    ReportTable,
-    ReportTypeTable,
-    ParkingLotTable,
-    ParkingSlotTable
+    User,
+    Vehicle,
+    Booking,
+    Payment,
+    Invoice,
+    Report,
+    ReportType,
+    ParkingLot,
+    ParkingSlot
 ]
 
 # Dynamically add the tables to the Base metadata
