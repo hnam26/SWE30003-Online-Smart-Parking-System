@@ -1,10 +1,30 @@
-import re, inspect
+import re
 from datetime import datetime
+from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy.orm import relationship, declarative_base
 from typing import List, Union, TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .booking import Booking
     from .vehicle import Vehicle
     from DataAccessLayer.payment.payment import Payment
+
+Base = declarative_base()
+
+
+class UserTable(Base):
+    __tablename__ = 'User'
+    user_id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(100), nullable=False)
+    password = Column(String(100), nullable=False)
+    first_name = Column(String(100), nullable=False)
+    last_name = Column(String(100), nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    phone = Column(String(10), nullable=False)
+    dob = Column(Date, nullable=False)
+    vehicles = relationship('VehicleTable', back_populates='user')
+    bookings = relationship('BookingTable', back_populates='user')
+    payments = relationship('PaymentTable', back_populates='user')
 
 
 class User:
@@ -52,46 +72,46 @@ class User:
 
     def getPassword(self) -> str:
         return self.__password
-    
+
     def setPassword(self, password: str):
         self.__password = password
 
     def getFirstName(self) -> str:
         return self.__firstName
-    
+
     def setFirstName(self, firstName: str):
         self.__firstName = firstName
 
     def getLastName(self) -> str:
         return self.__lastName
-    
+
     def setLastName(self, lastName: str):
         self.__lastName = lastName
 
     def getFullName(self) -> str:
         return f"{self.__firstName} {self.__lastName}"
-    
+
     def getEmail(self) -> str:
         return self.__email
-    
+
     def setEmail(self, email: str):
         self.__email = self.validateEmail(email)
 
     def getPhone(self) -> str:
         return self.__phone
-    
+
     def setPhone(self, phone: str):
         self.__phone = self.validatePhone(phone)
 
     def getDob(self) -> str:
         return self.__dob
-    
+
     def setDob(self, dob: str):
         self.__dob = self.validateDob(dob)
 
     def getVehicles(self) -> List['Vehicle']:
         return self.__vehicle
-    
+
     def addVehicle(self, vehicle: 'Vehicle'):
         self.__vehicle.append(vehicle)
 
@@ -100,6 +120,6 @@ class User:
 
     def addBooking(self, booking: 'Booking'):
         self.__booking.append(booking)
-    
+
     def getPaymentMethod(self) -> 'Payment':
         return self.__payment
