@@ -1,17 +1,6 @@
 from DataAccessLayer.report.userReport import UserReport
 from DataAccessLayer.report.managementReport import ManagementReport
 # from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship, declarative_base
-
-Base = declarative_base()
-
-
-class ReportTypeTable(Base):
-    __tablename__ = 'ReportType'
-    report_type_id = Column(Integer, primary_key=True, autoincrement=True)
-    type_name = Column(String(50), nullable=False)
-    reports = relationship('ReportTable', back_populates='report_type')
 
 
 class ReportFactory:

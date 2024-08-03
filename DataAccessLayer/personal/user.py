@@ -1,30 +1,11 @@
 import re
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Date
-from sqlalchemy.orm import relationship, declarative_base
 from typing import List, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .booking import Booking
     from .vehicle import Vehicle
     from DataAccessLayer.payment.payment import Payment
-
-Base = declarative_base()
-
-
-class UserTable(Base):
-    __tablename__ = 'User'
-    user_id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String(100), nullable=False)
-    password = Column(String(100), nullable=False)
-    first_name = Column(String(100), nullable=False)
-    last_name = Column(String(100), nullable=False)
-    email = Column(String(100), unique=True, nullable=False)
-    phone = Column(String(10), nullable=False)
-    dob = Column(Date, nullable=False)
-    vehicles = relationship('VehicleTable', back_populates='user')
-    bookings = relationship('BookingTable', back_populates='user')
-    payments = relationship('PaymentTable', back_populates='user')
 
 
 class User:
