@@ -1,37 +1,27 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import threading
-from DataAccessLayer.models.user import User
-from DataAccessLayer.models.vehicle import Vehicle
-from DataAccessLayer.models.booking import Booking
-from DataAccessLayer.models.invoice import Invoice
-from DataAccessLayer.models.payment import Payment
-from DataAccessLayer.models.report import Report
-from DataAccessLayer.models.reportType import ReportType
-from DataAccessLayer.models.parkingLot import ParkingLot
-from DataAccessLayer.models.parkingSlot import ParkingSlot
+from DataAccessLayer.models.base import Base
+
 
 # Collect all Base classes
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
-
-# List all the table classes
-table_classes = [
-    User,
-    Vehicle,
-    Booking,
-    Payment,
-    Invoice,
-    Report,
-    ReportType,
-    ParkingLot,
-    ParkingSlot
-]
-
-# Dynamically add the tables to the Base metadata
-for table_class in table_classes:
-    table_class.__table__.metadata = Base.metadata
+# # List all the table classes
+# table_classes = [
+#     User,
+#     Vehicle,
+#     Booking,
+#     Payment,
+#     Invoice,
+#     Report,
+#     ReportType,
+#     ParkingLot,
+#     ParkingSlot
+# ]
+#
+# # Dynamically add the tables to the Base metadata
+# for table_class in table_classes:
+#     table_class.__table__.metadata = Base.metadata
 
 
 class DatabaseAccess:

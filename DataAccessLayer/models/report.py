@@ -1,11 +1,10 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
+from .base import Base
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .reportType import ReportType
-
-Base = declarative_base()
 
 
 class Report(Base):

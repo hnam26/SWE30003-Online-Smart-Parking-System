@@ -1,9 +1,8 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.personal.user import User
 from DataAccessLayer.personal.booking import Booking
 from DataAccessLayer.personal import user
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
-from DataAccessLayer.models import user as userModel
+from DataAccessLayer.models.user import User
 from DataAccessLayer.models import parkingSlot as parkingSlotModel
 from BusinessLogic.bookingServices import BookingServices
 from typing import Union
@@ -28,7 +27,7 @@ class UserServices:
         while True:
             session = self.__db.getSession()
             try:
-                validatedUser = User(
+                validatedUser = user.User(
                     firstName=firstName,
                     lastName=lastName,
                     username=username,
@@ -37,7 +36,7 @@ class UserServices:
                     dob=dob,
                     password=password
                 )
-                newUser = userModel.User(
+                newUser = User(
                     first_name=validatedUser.getFirstName(),
                     last_name=validatedUser.getLastName(),
                     username=validatedUser.getUsername(),
@@ -63,7 +62,7 @@ class UserServices:
     
     def login(self, username: str, password: str) -> Union[User, bool]:
         session = self.__db.getSession()
-        user = session.query(userModel.User).filter_by(username=username, password=password).first()
+        user = session.query(User).filter_by(username=username, password=password).first()
         session.close()
         return user or False
 

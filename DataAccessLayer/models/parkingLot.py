@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
+from .base import Base
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .parkingSlot import ParkingSlot
 
-Base = declarative_base()
 
 
 class ParkingLot(Base):
