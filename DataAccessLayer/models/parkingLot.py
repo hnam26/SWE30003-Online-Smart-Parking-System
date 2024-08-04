@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from .parkingSlot import ParkingSlot
 
 
-
 class ParkingLot(Base):
     __tablename__ = 'ParkingLot'
     parking_lot_id = Column(Integer, primary_key=True, autoincrement=True)

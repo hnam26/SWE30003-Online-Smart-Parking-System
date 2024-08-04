@@ -3,8 +3,9 @@ from BusinessLogic.bookingServices import BookingServices
 from BusinessLogic.invoiceServices import InvoiceServices
 from DataAccessLayer.personal.user import User
 from BusinessLogic.userServices import UserServices
-from BusinessLogic.services import Services
-from DataAccessLayer.parking.parkingLot import ParkingLot
+from BusinessLogic.parkingServices import ParkingServices
+from DataAccessLayer.report.reportFactory import ReportFactory
+
 
 def initialMenu():
     print("Please Log-in to continue")
@@ -18,7 +19,8 @@ def initialMenu():
 
 def functionsMenu(user: User):
     while True:
-        services = Services()
+        reports = ReportFactory()
+        parkingServices = ParkingServices()
         userServices = UserServices()
         # bookingServices = BookingServices()
         # invoiceServices = InvoiceServices()
@@ -27,13 +29,15 @@ def functionsMenu(user: User):
         print("2. Make Booking")
         print("3. Check In")
         print("4. Check Out")
+        print("5. Generate Report")
         print("5. Exit")
 
         choice = input("Enter your choice: ")
         match choice:
             case "1":
-                services.viewAvailableParkingSlots()
-                break
+                while True:
+                    parkingServices.viewAvailableParkingSlots()
+                    break
             case "2":
                 while True:
                     slotNumber = input("Parking Slot: ")
@@ -60,14 +64,17 @@ def functionsMenu(user: User):
             case "4":
                 break
             case "5":
+                while True:
+                    reports.reportMenu()
+                    break
+            case "6":
                 print("Thank You")
                 break
             case default:
                 print("Invalid Choice")
 
-def main():
 
-    # Slots =
+def main():
     print("Welcome to Online Smart Parking System")
 
     while True:

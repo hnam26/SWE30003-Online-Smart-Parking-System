@@ -6,5 +6,5 @@ class Report(ABC):
         pass
 
     @abstractmethod
-    def generateReport(self):
+    def generateReport(self, user_id=None):
         pass
