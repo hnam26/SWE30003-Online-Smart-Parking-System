@@ -1,7 +1,7 @@
 class ParkingSlot:
-    def __init__(self, location: str, isAvailable: bool):
+    def __init__(self, location: str):
         self.__location = location
-        self.__isAvailable = isAvailable
+        self.__isAvailable = True
 
     def getLocation(self) -> str:
         return self.__location

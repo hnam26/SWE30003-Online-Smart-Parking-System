@@ -100,7 +100,7 @@ def main():
                 print("Thank you for using Online Smart Parking System")
                 break
 
-            case default:
+            case _:
                 print("Invalid choice")
 
 

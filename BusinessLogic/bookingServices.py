@@ -9,11 +9,11 @@ class BookingServices:
         self.__db = DatabaseAccess()
 
     @staticmethod
-    def calculateFee(booking: Booking) -> int:
+    def calculateFee(booking: Booking, lateTime: int = None) -> int:
         # Calculate the fee based on the duration
         # Fee is $10 per hour
         if booking.isLateCheckOut():
-            return booking.getDuration() * 10 + 10
+            return lateTime * 15
         return booking.getDuration() * 10
 
     def makePayment(self, booking: Booking, payment: Payment) -> bool:
@@ -31,14 +31,15 @@ class BookingServices:
             invoiceServices = InvoiceServices()
             invoiceCreated = invoiceServices.generateInvoice(payment.getInvoice())
 
-            if invoiceCreated:
-                session.add(payment)
-                session.commit()
-                print("Payment record saved to the database.")
-                return True
-            else:
+            if not invoiceCreated:
                 session.rollback()
                 return False
+
+            session.add(payment)
+            session.commit()
+            print("Payment record saved to the database.")
+            return True
+
         except Exception as e:
             session.rollback()
             print(f"An error occurred: {e}")
@@ -79,4 +80,5 @@ class BookingServices:
         return True
 
     def checkLateCheckOut(self) -> bool:
+
         pass
