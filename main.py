@@ -3,7 +3,8 @@ from BusinessLogic.bookingServices import BookingServices
 from BusinessLogic.invoiceServices import InvoiceServices
 from DataAccessLayer.personal.user import User
 from BusinessLogic.userServices import UserServices
-
+from BusinessLogic.services import Services
+from DataAccessLayer.parking.parkingLot import ParkingLot
 
 def initialMenu():
     print("Please Log-in to continue")
@@ -17,6 +18,7 @@ def initialMenu():
 
 def functionsMenu(user: User):
     while True:
+        services = Services()
         userServices = UserServices()
         # bookingServices = BookingServices()
         # invoiceServices = InvoiceServices()
@@ -30,13 +32,13 @@ def functionsMenu(user: User):
         choice = input("Enter your choice: ")
         match choice:
             case "1":
-                
+                services.viewAvailableParkingSlots()
                 break
             case "2":
                 while True:
-                    slot_number = input("Parking Slot: ")
-                    parking_slot = userServices.getParkingSlotByNumber(slot_number)
-                    if not parking_slot:
+                    slotNumber = input("Parking Slot: ")
+                    parkingSlot = userServices.getParkingSlotByNumber(slotNumber)
+                    if not parkingSlot:
                         print("Invalid Parking Slot Number\n")
                         continue
 
@@ -46,7 +48,7 @@ def functionsMenu(user: User):
                         print("Invalid Duration. Please enter a number.\n")
                         continue
 
-                    booking = userServices.makeBooking(user, parking_slot, duration)
+                    booking = userServices.makeBooking(user, parkingSlot, duration)
                     if booking:
                         print("Booking Successfully \n")
                         break
@@ -63,8 +65,9 @@ def functionsMenu(user: User):
             case default:
                 print("Invalid Choice")
 
-
 def main():
+
+    # Slots =
     print("Welcome to Online Smart Parking System")
 
     while True:
