@@ -4,8 +4,6 @@ if TYPE_CHECKING:
     from DataAccessLayer.personal.invoice import Invoice
 
 
-
-
 class Payment(ABC):
     def __init__(self, amount: int):
         self.__amount = amount
