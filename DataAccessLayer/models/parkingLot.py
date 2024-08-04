@@ -10,5 +10,6 @@ if TYPE_CHECKING:
 class ParkingLot(Base):
     __tablename__ = 'ParkingLot'
     parking_lot_id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50), nullable=True) 
     location = Column(String(100), nullable=False)
     slots = relationship('ParkingSlot', back_populates='parking_lot')

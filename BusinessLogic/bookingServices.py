@@ -7,6 +7,7 @@ from .invoiceServices import InvoiceServices
 class BookingServices:
     def __init__(self):
         self.__db = DatabaseAccess()
+        self.session = self.__db.getSession()
 
     @staticmethod
     def calculateFee(booking: Booking) -> int:
@@ -17,7 +18,6 @@ class BookingServices:
         return booking.getDuration() * 10
 
     def makePayment(self, booking: Booking, payment: Payment) -> bool:
-        session = self.__db.getSession()
         try:
             fee = self.calculateFee(booking)
             # payment = Payment(booking=booking, payment_method=paymentMethod, amount=fee, payment_date=datetime.now())
@@ -31,20 +31,20 @@ class BookingServices:
             invoiceServices = InvoiceServices()
             invoiceCreated = invoiceServices.generateInvoice(payment.getInvoice())
 
-            if invoiceCreated:
-                session.add(payment)
-                session.commit()
-                print("Payment record saved to the database.")
-                return True
-            else:
-                session.rollback()
+            if not invoiceCreated:
+                self.session.rollback()
                 return False
+
+            self.session.add(payment)
+            self.session.commit()
+            print("Payment record saved to the database.")
+            return True
         except Exception as e:
-            session.rollback()
+            self.session.rollback()
             print(f"An error occurred: {e}")
             return False
         finally:
-            session.close()
+            self.session.close()
         # paymentStatus = payment.processPayment(booking, self.calculateFee(booking))
         # booking.setPaymentStatus(paymentStatus)
         #

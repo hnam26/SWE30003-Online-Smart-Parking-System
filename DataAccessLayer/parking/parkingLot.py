@@ -1,4 +1,4 @@
-from .parkingSlot import ParkingSlot  # Use relative import for ParkingSlotTable
+from .parkingSlot import ParkingSlot
 from typing import List
 
 class ParkingLot:

@@ -18,19 +18,21 @@ def initialMenu():
 
 
 def functionsMenu(user: User):
+    reports = ReportFactory()
+    name = user.getFirstName()
+    print("Hello, " + name + "!")
+    parkingServices = ParkingServices()
+    userServices = UserServices()
+    # bookingServices = BookingServices()
+    # invoiceServices = InvoiceServices()
     while True:
-        reports = ReportFactory()
-        parkingServices = ParkingServices()
-        userServices = UserServices()
-        # bookingServices = BookingServices()
-        # invoiceServices = InvoiceServices()
         print("What can we help you?")
         print("1. See All Available Parking Slots")
         print("2. Make Booking")
         print("3. Check In")
         print("4. Check Out")
         print("5. Generate Report")
-        print("5. Exit")
+        print("6. Exit")
 
         choice = input("Enter your choice: ")
         match choice:
@@ -79,11 +81,13 @@ def main():
 
     while True:
         choice = initialMenu()
-        userServices = UserServices()
+        # reports = ReportFactory()
+        # parkingServices = ParkingServices()
+        # bookingServices = BookingServices()
+        # invoiceServices = InvoiceServices()
         match choice:
-
             case "1":
-
+                userServices = UserServices()
                 while True:
                     user = userServices.login(input("Username: "), input("Password: "))
                     if user:
@@ -94,10 +98,12 @@ def main():
                         print("Invalid Username or Password\n")
                         break
             case "2":
+                userServices = UserServices()
                 while True:
-                    newUser = userServices.register(input("First Name: "), input("Last Name: "), input("Email: "),
-                                                    input("Phone Number: "), input("Date of Birth: "),
-                                                    input("Username: "), input("Password: "))
+                    newUser = userServices.register(
+                        input("First Name: "), input("Last Name: "), input("Email: "),
+                        input("Phone Number: "), input("Date of Birth: "),
+                        input("Username: "), input("Password: "))
 
                     if not newUser:
                         print("Registration Failed\n")
@@ -105,11 +111,9 @@ def main():
 
                     print("Register Successful\n")
                     break
-
             case "3":
                 print("Thank you for using Online Smart Parking System")
                 break
-
             case default:
                 print("Invalid choice")
 

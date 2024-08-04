@@ -1,5 +1,7 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.report.report import Report
+from DataAccessLayer.models.user import User
+from BusinessLogic.userServices import UserServices
 from sqlalchemy import text
 from tabulate import tabulate
 
@@ -8,12 +10,14 @@ class UserReport(Report):
         super().__init__()
         self.__db = DatabaseAccess()
 
-    def generateReport(self, user_id=None):
+    def generateReport(self, user_id: int=None):
         session = self.__db.getSession()
         try:
             # Query for personal data
             user_query = text("SELECT * FROM User WHERE user_id = :user_id")
             user_result = session.execute(user_query, {'user_id': user_id}).mappings().first()
+            user = session.query(User).filter(User.user_id == user_id)
+            # chỗ này có th xài user services để abstract tốt hoơn
 
             if user_result:
                 user_data = dict(user_result)
