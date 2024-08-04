@@ -3,8 +3,9 @@ from BusinessLogic.bookingServices import BookingServices
 from BusinessLogic.invoiceServices import InvoiceServices
 from DataAccessLayer.personal.user import User
 from BusinessLogic.userServices import UserServices
-from BusinessLogic.services import Services
-from DataAccessLayer.parking.parkingLot import ParkingLot
+from BusinessLogic.parkingServices import ParkingServices
+from DataAccessLayer.report.reportFactory import ReportFactory
+
 
 def initialMenu():
     print("Please Log-in to continue")
@@ -17,23 +18,28 @@ def initialMenu():
 
 
 def functionsMenu(user: User):
+    reports = ReportFactory()
+    name = user.getFirstName()
+    print("Hello, " + name + "!")
+    parkingServices = ParkingServices()
+    userServices = UserServices()
+    # bookingServices = BookingServices()
+    # invoiceServices = InvoiceServices()
     while True:
-        services = Services()
-        userServices = UserServices()
-        # bookingServices = BookingServices()
-        # invoiceServices = InvoiceServices()
         print("What can we help you?")
         print("1. See All Available Parking Slots")
         print("2. Make Booking")
         print("3. Check In")
         print("4. Check Out")
-        print("5. Exit")
+        print("5. Generate Report")
+        print("6. Exit")
 
         choice = input("Enter your choice: ")
         match choice:
             case "1":
-                services.viewAvailableParkingSlots()
-                break
+                while True:
+                    parkingServices.viewAvailableParkingSlots()
+                    break
             case "2":
                 while True:
                     slotNumber = input("Parking Slot: ")
@@ -60,23 +66,28 @@ def functionsMenu(user: User):
             case "4":
                 break
             case "5":
+                while True:
+                    reports.reportMenu()
+                    break
+            case "6":
                 print("Thank You")
                 break
             case default:
                 print("Invalid Choice")
 
-def main():
 
-    # Slots =
+def main():
     print("Welcome to Online Smart Parking System")
 
     while True:
         choice = initialMenu()
-        userServices = UserServices()
+        # reports = ReportFactory()
+        # parkingServices = ParkingServices()
+        # bookingServices = BookingServices()
+        # invoiceServices = InvoiceServices()
         match choice:
-
             case "1":
-
+                userServices = UserServices()
                 while True:
                     user = userServices.login(input("Username: "), input("Password: "))
                     if user:
@@ -87,10 +98,12 @@ def main():
                         print("Invalid Username or Password\n")
                         break
             case "2":
+                userServices = UserServices()
                 while True:
-                    newUser = userServices.register(input("First Name: "), input("Last Name: "), input("Email: "),
-                                                    input("Phone Number: "), input("Date of Birth: "),
-                                                    input("Username: "), input("Password: "))
+                    newUser = userServices.register(
+                        input("First Name: "), input("Last Name: "), input("Email: "),
+                        input("Phone Number: "), input("Date of Birth: "),
+                        input("Username: "), input("Password: "))
 
                     if not newUser:
                         print("Registration Failed\n")
@@ -98,11 +111,9 @@ def main():
 
                     print("Register Successful\n")
                     break
-
             case "3":
                 print("Thank you for using Online Smart Parking System")
                 break
-
             case default:
                 print("Invalid choice")
 

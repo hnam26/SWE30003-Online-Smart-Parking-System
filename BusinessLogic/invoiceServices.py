@@ -9,3 +9,4 @@ class InvoiceServices:
     @staticmethod
     def generateInvoice(invoice: Invoice):
         return invoice.getAmount()
+

@@ -1,46 +1,66 @@
+import bcrypt
+from datetime import datetime
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.personal.booking import Booking
-from DataAccessLayer.personal import user as userClass
-from DataAccessLayer.models.user import User
+from DataAccessLayer.personal.user import User
+from DataAccessLayer.models.user import User as UserModel
 from DataAccessLayer.models.booking import Booking as BookingModel
 from DataAccessLayer.parking.parkingSlot import ParkingSlot
 from DataAccessLayer.personal import vehicle as vehicleClass
 from DataAccessLayer.models.vehicle import Vehicle
 from DataAccessLayer.utils.typesOfVehicle import TypesOfVehicle
-from DataAccessLayer.models import parkingSlot as parkingSlotModel
 from BusinessLogic.bookingServices import BookingServices
 from typing import Union, List
 
 class UserServices:
     def __init__(self):
         self.__db = DatabaseAccess()
+        self.session = self.__db.getSession()
 
     def save(self):
-        session = self.__db.getSession()
         try:
-            session.add(self)
-            session.commit()
+            self.session.add(self)
+            self.session.commit()
             print("User record saved to the database.")
         except Exception as e:
-            session.rollback()
+            self.session.rollback()
             print(f"An error occurred: {e}")
         finally:
-            session.close()
+            self.session.close()
+
+    def get_user_by_id(self, user_id: int):
+        try:
+            return self.session.query(UserModel).filter(UserModel.user_id == user_id).first()
+        except Exception as e:
+            print(f"An error occurred when trying to get user {user_id}: {e}")
+            return None
+        finally:
+            self.session.close()
+            
+    def response_user(self, user: UserModel):
+        return User(
+            firstName=user.first_name,
+            lastName=user.last_name,
+            username=user.username,
+            email=user.email,
+            phone=user.phone,
+            dob=user.dob.strftime("%d-%m-%Y"),
+            password=user.password
+        )
 
     def register_user(self, firstName: str, lastName: str, email: str, phoneNumber: str, dob: str, username: str,
                       password: str) -> Union[int, None]:
-        session = self.__db.getSession()
         try:
-            validatedUser = userClass.User(
+            validatedUser = User(
                 firstName=firstName,
                 lastName=lastName,
                 username=username,
                 email=email,
                 phone=phoneNumber,
                 dob=dob,
-                password=password
+                password=bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             )
-            newUser = User(
+            newUser = UserModel(
                 first_name=validatedUser.getFirstName(),
                 last_name=validatedUser.getLastName(),
                 username=validatedUser.getUsername(),
@@ -49,19 +69,18 @@ class UserServices:
                 dob=validatedUser.getDob(),
                 password=validatedUser.getPassword()
             )
-            session.add(newUser)
-            session.commit()
+            self.session.add(newUser)
+            self.session.commit()
             print("User registered successfully!")
             return newUser.user_id
         except Exception as e:
-            session.rollback()
+            self.session.rollback()
             print(f"An error occurred: {e}")
             return None
         finally:
-            session.close()
+            self.session.close()
 
     def register_vehicle(self, user_id: int, licensePlate: str, vehicleTypeStr: str) -> Union[Vehicle, None]:
-        session = self.__db.getSession()
         try:
             try:
                 vehicleType = TypesOfVehicle[vehicleTypeStr]
@@ -78,16 +97,16 @@ class UserServices:
                 license_plate=vehicleInstance.getLicensePlate(),
                 vehicle_type=vehicleInstance.getVehicleType()
             )
-            session.add(newVehicle)
-            session.commit()
+            self.session.add(newVehicle)
+            self.session.commit()
             print("Vehicle registered successfully!")
             return newVehicle
         except Exception as e:
-            session.rollback()
+            self.session.rollback()
             print(f"An error occurred: {e}")
             return None
         finally:
-            session.close()
+            self.session.close()
 
     def register(self, firstName: str, lastName: str, email: str, phoneNumber: str, dob: str, username: str,
                  password: str):
@@ -111,29 +130,21 @@ class UserServices:
                     print("Exiting registration.")
                     return None, None
 
-    
-    def login(self, username: str, password: str) -> Union[User, bool]:
-        session = self.__db.getSession()
-        user = session.query(User).filter_by(username=username, password=password).first()
-        session.close()
-        return user or False
+    def login(self, username: str, password: str) -> Union[User, None]:
+        # user = self.session.query(User).filter_by(username=username, password=password).first()
+        # self.session.close()
+        user = self.session.query(UserModel).filter(UserModel.username == username).first()
+        if user is None:
+            return None
+        valid_password = bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8'))
+        return self.response_user(user) if valid_password else None
+        # return user or False
 
     def logout(self):
         return self.__db.logout()
 
-    def getParkingSlotByNumber(self, slot_number: str) -> Union[ParkingSlot, None]:
-        session = self.__db.getSession()
-        try:
-            parking_slot = session.query(parkingSlotModel.ParkingSlot).filter_by(slot_number=slot_number).first()
-            return parking_slot
-        except Exception as e:
-            print(f"An error occurred while fetching the parking slot: {e}")
-            return None
-        finally:
-            session.close()
 
-    def makeBooking(self, user: userClass.User, parkingSlot: ParkingSlot, duration: int) -> Union[Booking, False]:
-        session = self.__db.getSession()
+    def makeBooking(self, user: User, parkingSlot: ParkingSlot, duration: int) -> Union[Booking, False]:
         try:
             if not parkingSlot.getIsAvailable():
                 return False
@@ -143,15 +154,15 @@ class UserServices:
             bookingServices.makePayment(booking, user.getPaymentMethod())
 
             if booking.isPaymentSuccessful():
-                session.add(booking)
-                session.commit()
+                self.session.add(booking)
+                self.session.commit()
                 print("Booking record saved to the database.")
                 return booking, True
             else:
                 return False
         except Exception as e:
-            session.rollback()
+            self.session.rollback()
             print(f"An error occurred: {e}")
             return False
         finally:
-            session.close()
+            self.session.close()

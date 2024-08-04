@@ -4,26 +4,6 @@ import threading
 from DataAccessLayer.models.base import Base
 
 
-# Collect all Base classes
-
-# # List all the table classes
-# table_classes = [
-#     User,
-#     Vehicle,
-#     Booking,
-#     Payment,
-#     Invoice,
-#     Report,
-#     ReportType,
-#     ParkingLot,
-#     ParkingSlot
-# ]
-#
-# # Dynamically add the tables to the Base metadata
-# for table_class in table_classes:
-#     table_class.__table__.metadata = Base.metadata
-
-
 class DatabaseAccess:
     __instance = None
     __lock = threading.Lock()
