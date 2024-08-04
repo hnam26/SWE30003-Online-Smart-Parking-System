@@ -1,21 +1,17 @@
 class ParkingSlot:
-    def __init__(self, location: str, slot_number: str):
-        self.__location = location
-        # làm sao cho nó thống nhất vs bên table nhé
-        self.__slot_number = slot_number
-        self.__isAvailable = True
+    def __init__(self, parkingLotId: int, slotNumber: str, isAvailable: bool):
+        self.__parkingLotId = parkingLotId
+        self.__slotNumber = slotNumber
+        self.__isAvailable = isAvailable
 
-    def getLocation(self) -> str:
-        return self.__location
-    
-    def setLocation(self, location: str):
-        self.__location = location
+    def getParkingLotId(self) -> int:
+        return self.__parkingLotId
 
     def getSlotNumber(self) -> str:
-        return self.__slot_number
+        return self.__slotNumber
 
     def setSlotNumber(self, value: str):
-        self.__slot_number = value
+        self.__slotNumber = value
 
     def getIsAvailable(self) -> bool:
         return self.__isAvailable

@@ -24,6 +24,3 @@ class ParkingLot:
 
     def setLocation(self, location: str):
         self.__location = location
-
-    def getAllAvailableSlots(self) -> List[ParkingSlot]:
-        return [slot for slot in self.__slots if slot.getIsAvailable()]

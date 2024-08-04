@@ -23,8 +23,7 @@ def functionsMenu(user: User):
     print("Hello, " + name + "!")
     parkingServices = ParkingServices()
     userServices = UserServices()
-    # bookingServices = BookingServices()
-    # invoiceServices = InvoiceServices()
+
     while True:
         print("What can we help you?")
         print("1. See All Available Parking Slots")
@@ -43,7 +42,7 @@ def functionsMenu(user: User):
             case "2":
                 while True:
                     slotNumber = input("Parking Slot: ")
-                    parkingSlot = userServices.getParkingSlotByNumber(slotNumber)
+                    parkingSlot = parkingServices.getParkingSlotByNumber(slotNumber)
                     if not parkingSlot:
                         print("Invalid Parking Slot Number\n")
                         continue
@@ -81,10 +80,7 @@ def main():
 
     while True:
         choice = initialMenu()
-        # reports = ReportFactory()
-        # parkingServices = ParkingServices()
-        # bookingServices = BookingServices()
-        # invoiceServices = InvoiceServices()
+
         match choice:
             case "1":
                 userServices = UserServices()
@@ -104,7 +100,7 @@ def main():
                         input("First Name: "), input("Last Name: "), input("Email: "),
                         input("Phone Number: "), input("Date of Birth: "),
                         input("Username: "), input("Password: "))
-
+                    
                     if not newUser:
                         print("Registration Failed\n")
                         break

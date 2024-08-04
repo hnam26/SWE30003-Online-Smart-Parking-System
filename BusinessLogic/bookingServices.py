@@ -19,8 +19,8 @@ class BookingServices:
 
     def makePayment(self, booking: Booking, payment: Payment) -> bool:
         try:
+            print(booking, payment)
             fee = self.calculateFee(booking)
-            # payment = Payment(booking=booking, payment_method=paymentMethod, amount=fee, payment_date=datetime.now())
             paymentStatus = payment.processPayment(booking, fee)
             booking.setPaymentStatus(paymentStatus)
 
@@ -41,19 +41,12 @@ class BookingServices:
             return True
         except Exception as e:
             self.session.rollback()
+            raise e
             print(f"An error occurred: {e}")
             return False
         finally:
             self.session.close()
-        # paymentStatus = payment.processPayment(booking, self.calculateFee(booking))
-        # booking.setPaymentStatus(paymentStatus)
-        #
-        # if not booking.isPaymentSuccessful():
-        #     return False
-        #
-        # booking.getParkingSlot().setIsAvailable(False)
-        # invoiceServices = InvoiceServices()
-        # return invoiceServices.generateInvoice(Invoice(payment))
+
 
     @staticmethod
     def checkIn(booking: Booking) -> bool:

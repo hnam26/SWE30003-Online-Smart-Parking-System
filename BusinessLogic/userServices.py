@@ -28,16 +28,16 @@ class UserServices:
         finally:
             self.session.close()
 
-    def get_user_by_id(self, user_id: int):
+    def getUserById(self, userId: int):
         try:
-            return self.session.query(UserModel).filter(UserModel.user_id == user_id).first()
+            return self.session.query(UserModel).filter(UserModel.user_id == userId).first()
         except Exception as e:
-            print(f"An error occurred when trying to get user {user_id}: {e}")
+            print(f"An error occurred when trying to get user {userId}: {e}")
             return None
         finally:
             self.session.close()
-            
-    def response_user(self, user: UserModel):
+
+    def responseUser(self, user: UserModel):
         return User(
             firstName=user.first_name,
             lastName=user.last_name,
@@ -48,7 +48,7 @@ class UserServices:
             password=user.password
         )
 
-    def register_user(self, firstName: str, lastName: str, email: str, phoneNumber: str, dob: str, username: str,
+    def registerUser(self, firstName: str, lastName: str, email: str, phoneNumber: str, dob: str, username: str,
                       password: str) -> Union[int, None]:
         try:
             validatedUser = User(
@@ -80,7 +80,9 @@ class UserServices:
         finally:
             self.session.close()
 
-    def register_vehicle(self, user_id: int, licensePlate: str, vehicleTypeStr: str) -> Union[Vehicle, None]:
+        
+
+    def registerVehicle(self, user_id: int, licensePlate: str, vehicleTypeStr: str) -> Union[Vehicle, None]:
         try:
             try:
                 vehicleType = TypesOfVehicle[vehicleTypeStr]
@@ -111,24 +113,18 @@ class UserServices:
     def register(self, firstName: str, lastName: str, email: str, phoneNumber: str, dob: str, username: str,
                  password: str):
         while True:
-            user_id = self.register_user(firstName, lastName, email, phoneNumber, dob, username, password)
+            user_id = self.registerUser(firstName, lastName, email, phoneNumber, dob, username, password)
             if user_id is not None:
                 print("Please register your vehicle")
                 licensePlate = input("License Plate: ")
                 vehicleTypeStr = input("Vehicle Type: ")
-                newVehicle = self.register_vehicle(user_id, licensePlate, vehicleTypeStr)
+                newVehicle = self.registerVehicle(user_id, licensePlate, vehicleTypeStr)
                 if newVehicle is not None:
                     return user_id, newVehicle
                 else:
-                    retry = input("Would you like to try again? (y/n): ").strip().lower()
-                    if retry != 'y':
-                        print("Exiting registration.")
-                        return user_id, None
+                    break
             else:
-                retry = input("Would you like to try again? (y/n): ").strip().lower()
-                if retry != 'y':
-                    print("Exiting registration.")
-                    return None, None
+                break
 
     def login(self, username: str, password: str) -> Union[User, None]:
         # user = self.session.query(User).filter_by(username=username, password=password).first()
@@ -137,7 +133,7 @@ class UserServices:
         if user is None:
             return None
         valid_password = bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8'))
-        return self.response_user(user) if valid_password else None
+        return self.responseUser(user) if valid_password else None
         # return user or False
 
     def logout(self):
@@ -146,6 +142,7 @@ class UserServices:
 
     def makeBooking(self, user: User, parkingSlot: ParkingSlot, duration: int) -> Union[Booking, False]:
         try:
+            session = self.__db.getSession()
             if not parkingSlot.getIsAvailable():
                 return False
 
@@ -154,15 +151,16 @@ class UserServices:
             bookingServices.makePayment(booking, user.getPaymentMethod())
 
             if booking.isPaymentSuccessful():
-                self.session.add(booking)
-                self.session.commit()
+                session.add(booking)
+                session.commit()
                 print("Booking record saved to the database.")
                 return booking, True
             else:
                 return False
         except Exception as e:
-            self.session.rollback()
+            session.rollback()
+            raise e
             print(f"An error occurred: {e}")
             return False
         finally:
-            self.session.close()
+            session.close()
