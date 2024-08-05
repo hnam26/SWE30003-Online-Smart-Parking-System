@@ -1,16 +1,14 @@
 import bcrypt
-from datetime import datetime
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.personal.booking import Booking
-from DataAccessLayer.personal.user import User
+from DataAccessLayer.models.personal import Booking, vehicle as vehicleClass
+from DataAccessLayer.models.personal.user import User
 from DataAccessLayer.models.user import User as UserModel
-from DataAccessLayer.models.booking import Booking as BookingModel
-from DataAccessLayer.parking.parkingSlot import ParkingSlot
-from DataAccessLayer.personal import vehicle as vehicleClass
+from DataAccessLayer.models.parking import ParkingSlot
 from DataAccessLayer.models.vehicle import Vehicle
 from DataAccessLayer.utils.typesOfVehicle import TypesOfVehicle
 from BusinessLogic.bookingServices import BookingServices
-from typing import Union, List
+from typing import Union
+
 
 class UserServices:
     def __init__(self):

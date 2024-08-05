@@ -1,6 +1,6 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from sqlalchemy import text
-from DataAccessLayer.report.report import Report
+from DataAccessLayer.models.report.report import Report
 from tabulate import tabulate
 
 class ManagementReport(Report):

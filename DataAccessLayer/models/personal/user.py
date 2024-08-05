@@ -3,9 +3,7 @@ from datetime import datetime
 from typing import List, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .booking import Booking
-    from .vehicle import Vehicle
-    from DataAccessLayer.payment.payment import Payment
+    pass
 
 
 class User:

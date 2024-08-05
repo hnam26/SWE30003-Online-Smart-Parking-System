@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from DataAccessLayer.personal.invoice import Invoice
+    from DataAccessLayer.models.personal.invoice import Invoice
 
 
 class Payment(ABC):

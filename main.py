@@ -1,10 +1,7 @@
-import BusinessLogic
-from BusinessLogic.bookingServices import BookingServices
-from BusinessLogic.invoiceServices import InvoiceServices
-from DataAccessLayer.personal.user import User
+from DataAccessLayer.models.personal.user import User
 from BusinessLogic.userServices import UserServices
 from BusinessLogic.parkingServices import ParkingServices
-from DataAccessLayer.report.reportFactory import ReportFactory
+from DataAccessLayer.models.report.reportFactory import ReportFactory
 
 
 def initialMenu():

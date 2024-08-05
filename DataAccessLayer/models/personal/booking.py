@@ -1,7 +1,7 @@
-from DataAccessLayer.parking.parkingSlot import ParkingSlot
+from DataAccessLayer.models.parking.parkingSlot import ParkingSlot
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from .user import User
+    pass
 
 
 class Booking:

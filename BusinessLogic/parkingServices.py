@@ -1,10 +1,10 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.models.parkingSlot import ParkingSlot as modelSlot
 from DataAccessLayer.models.parkingLot import ParkingLot as modelLot
-from DataAccessLayer.parking.parkingSlot import ParkingSlot
-from DataAccessLayer.parking.parkingLot import ParkingLot
+from DataAccessLayer.models.parking import ParkingSlot
+from DataAccessLayer.models.parking import ParkingLot
 from tabulate import tabulate
-from typing import List, Union
+from typing import Union
 
 
 class ParkingServices:

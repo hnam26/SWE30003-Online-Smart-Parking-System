@@ -1,5 +1,5 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.personal.invoice import Invoice
+from DataAccessLayer.models.personal.invoice import Invoice
 
 
 class InvoiceServices:
