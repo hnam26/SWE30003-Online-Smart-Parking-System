@@ -1,20 +1,19 @@
-# from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.report.report import Report
+from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from sqlalchemy import text
-
+from DataAccessLayer.report.report import Report
+from tabulate import tabulate
 
 class ManagementReport(Report):
     def __init__(self):
         super().__init__()
         self.__db = DatabaseAccess()
-        self.db = db_instance
 
-    def generateReport(self):
-        session = self.db.getSession()
+    def generateReport(self, user_id=None):
+        session = self.__db.getSession()
         try:
             # Query for total revenue
-            revenueResult = session.execute(revenueQuery).scalar()
             revenueQuery = text("SELECT SUM(amount) as total_revenue FROM Payment")
+            revenueResult = session.execute(revenueQuery).scalar()
 
             # Query for slot availability
             occupiedSlotsQuery = text("SELECT COUNT(*) FROM ParkingSlot WHERE is_available = FALSE")
@@ -33,16 +32,30 @@ class ManagementReport(Report):
             bookingTrendsResult = session.execute(bookingTrendsQuery).mappings().all()
             bookingTrends = [dict(trend) for trend in bookingTrendsResult]
 
-            revenueStats = f"Total Revenue: {revenueResult}\nRevenue Details:\n" + "\n".join(
-                [f"{detail['payment_date']}: {detail['amount']}" for detail in revenueDetails]) + "\n"
-            bookingTrendsStats = "Booking Trends:\n" + "\n".join(
-                [f"{trend['start_time']}" for trend in bookingTrends]) + "\n"
+            revenue_stats = f"Total Revenue: {revenueResult}\n"
+            revenue_details = tabulate(
+                revenueDetails,
+                headers={"payment_date": "Payment Date", "amount": "Amount"},
+                tablefmt="grid"
+            )
+            booking_trends_stats = tabulate(
+                bookingTrends,
+                headers={"start_time": "Start Time"},
+                tablefmt="grid"
+            )
 
-            content = (f"Occupied Slots: {occupiedSlotsResult}\nAvailable Slots: {availableSlotsResult}\n" +
-                       revenueStats + bookingTrendsStats)
+            self.content = (
+                f"Occupied Slots: {occupiedSlotsResult}\n"
+                f"Available Slots: {availableSlotsResult}\n"
+                + revenue_stats
+                + "\nRevenue Details:\n" + revenue_details
+                + "\nBooking Trends:\n" + booking_trends_stats
+            )
         except Exception as e:
-            content = f"An error occurred: {e}"
+            self.content = f"An error occurred: {e}"
         finally:
             session.close()
 
-        return content
+    def printReport(self):
+        self.generateReport()
+        print(self.content)

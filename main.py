@@ -3,6 +3,8 @@ from BusinessLogic.bookingServices import BookingServices
 from BusinessLogic.invoiceServices import InvoiceServices
 from DataAccessLayer.personal.user import User
 from BusinessLogic.userServices import UserServices
+from BusinessLogic.parkingServices import ParkingServices
+from DataAccessLayer.report.reportFactory import ReportFactory
 
 
 def initialMenu():
@@ -16,27 +18,32 @@ def initialMenu():
 
 
 def functionsMenu(user: User):
+    reports = ReportFactory()
+    name = user.getFirstName()
+    print("Hello, " + name + "!")
+    parkingServices = ParkingServices()
+    userServices = UserServices()
+
     while True:
-        userServices = UserServices()
-        # bookingServices = BookingServices()
-        # invoiceServices = InvoiceServices()
         print("What can we help you?")
         print("1. See All Available Parking Slots")
         print("2. Make Booking")
         print("3. Check In")
         print("4. Check Out")
-        print("5. Exit")
+        print("5. Generate Report")
+        print("6. Exit")
 
         choice = input("Enter your choice: ")
         match choice:
             case "1":
-                
-                break
+                while True:
+                    parkingServices.viewAvailableParkingSlots()
+                    break
             case "2":
                 while True:
-                    slot_number = input("Parking Slot: ")
-                    parking_slot = userServices.getParkingSlotByNumber(slot_number)
-                    if not parking_slot:
+                    slotNumber = input("Parking Slot: ")
+                    parkingSlot = parkingServices.getParkingSlotByNumber(slotNumber)
+                    if not parkingSlot:
                         print("Invalid Parking Slot Number\n")
                         continue
 
@@ -46,7 +53,7 @@ def functionsMenu(user: User):
                         print("Invalid Duration. Please enter a number.\n")
                         continue
 
-                    booking = userServices.makeBooking(user, parking_slot, duration)
+                    booking = userServices.makeBooking(user, parkingSlot, duration)
                     if booking:
                         print("Booking Successfully \n")
                         break
@@ -58,6 +65,10 @@ def functionsMenu(user: User):
             case "4":
                 break
             case "5":
+                while True:
+                    reports.reportMenu()
+                    break
+            case "6":
                 print("Thank You")
                 break
             case default:
@@ -69,11 +80,10 @@ def main():
 
     while True:
         choice = initialMenu()
-        userServices = UserServices()
+
         match choice:
-
             case "1":
-
+                userServices = UserServices()
                 while True:
                     user = userServices.login(input("Username: "), input("Password: "))
                     if user:
@@ -84,23 +94,23 @@ def main():
                         print("Invalid Username or Password\n")
                         break
             case "2":
+                userServices = UserServices()
                 while True:
-                    newUser = userServices.register(input("First Name: "), input("Last Name: "), input("Email: "),
-                                                    input("Phone Number: "), input("Date of Birth: "),
-                                                    input("Username: "), input("Password: "))
-
+                    newUser = userServices.register(
+                        input("First Name: "), input("Last Name: "), input("Email: "),
+                        input("Phone Number: "), input("Date of Birth: "),
+                        input("Username: "), input("Password: "))
+                    
                     if not newUser:
                         print("Registration Failed\n")
                         break
 
                     print("Register Successful\n")
                     break
-
             case "3":
                 print("Thank you for using Online Smart Parking System")
                 break
-
-            case _:
+            case default:
                 print("Invalid choice")
 
 

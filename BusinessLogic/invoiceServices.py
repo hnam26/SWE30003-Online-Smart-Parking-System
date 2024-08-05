@@ -8,5 +8,5 @@ class InvoiceServices:
 
     @staticmethod
     def generateInvoice(invoice: Invoice):
-        print(f"The Invoice for Payment{1}", invoice.getPayment())
-        print(f"The total amount you need to pay is {1}", invoice.getAmount())
+        return invoice.getAmount()
+
