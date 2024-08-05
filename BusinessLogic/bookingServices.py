@@ -43,12 +43,6 @@ class BookingServices:
             
             booking.setStatus = BookingStatus.PAID.value
 
-            # self.__session.execute(
-            # update(Booking).
-            # where(Booking.getBookingId == booking.getBookingId).
-            # values(status="PAID")
-            # )
-
             if not booking.getStatus == "PAID":
                 return False
 
@@ -57,20 +51,13 @@ class BookingServices:
                 if parkingSlot.getParkingSlotId == booking.getParkingSlotId:
                     break
             parkingSlot.setIsAvailable = False
-            # self.__session.execute(
-            #     update(ParkingSlot).
-            #     where(ParkingSlot.getParkingSlotId == parkingSlot.getParkingSlotId).
-            #     values(is_available=False)
-            # )
 
             invoiceServices = InvoiceServices()
             invoiceCreated = invoiceServices.generateInvoice(payment)
 
             if not invoiceCreated:
                 self.__session.rollback()
-                return False
-
-            # self.__session.add(payment)            
+                return False        
 
             self.__session.commit()
             print("Payment record saved to the database.")
@@ -78,8 +65,6 @@ class BookingServices:
         except Exception as e:
             self.__session.rollback()
             print(f"An error occurred: {e}")
-            raise e
-            # return False
         finally:
             self.__session.close()
 
@@ -94,13 +79,6 @@ class BookingServices:
         if not booking.getStatus == "PAID":
             print("unpaid")
             return False
-
-        # self.__session.execute(
-        #     update(Booking).
-        #     where(Booking.getBookingId == bookingId).
-        #     values(status="IN")
-        # )
-
 
         booking.setStatus = BookingStatus.IN.value
         return True
@@ -123,22 +101,7 @@ class BookingServices:
                 break
 
         parkingSlot.setIsAvailable = True
-        # print(parkingSlot.getParkingSlotId)
-        
-        # self.__session.execute(
-        #     update(ParkingSlot).
-        #     where(ParkingSlot.getParkingSlotId == parkingSlot.getParkingSlotId).
-        #     values(is_available=True)
-        # )
-        
         self.__session.commit()
-
-        # booking.setStatus = BookingStatus.OUT.value
-        # self.__session.execute(
-        #     update(Booking).
-        #     where(Booking.getBookingId == bookingId).
-        #     values(status="OUT")
-        # )
 
         return True
 

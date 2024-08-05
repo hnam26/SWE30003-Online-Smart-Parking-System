@@ -1,13 +1,11 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.models.parking.parkingSlot import ParkingSlot 
 from DataAccessLayer.models.parking.parkingLot import ParkingLot 
-from tabulate import tabulate
 from typing import Union
 
 
 class ParkingServices:
     def __init__(self):
-        # print("Initializing Parking Services...")
         self.__db = DatabaseAccess()
         self.__session = self.__db.getSession()
         self.parkingLots = self.__session.query(ParkingLot).all()
@@ -33,8 +31,5 @@ class ParkingServices:
             for parkingSlot in parkingSlots:
                 if parkingSlot.getSlotNumber == slotNumber:
                     break
-
-            
+           
         return parkingSlot
-        # parkingSlot = self.__session.query(ParkingSlot).filter(ParkingSlot.getSlotNumber == slotNumber).first()
-        # print(parkingSlot)

@@ -50,7 +50,7 @@ def functionsMenu(user: User):
                         for i in range(len(availableParkingSlots)):
                             print(f"{i + 1}. {availableParkingSlots[i].getSlotNumber}")
                         
-                        break  # Exit the loop after displaying available slots
+                        break 
                     except ValueError:
                         print("Invalid input. Please enter a number.")
                     except IndexError:

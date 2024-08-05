@@ -1,5 +1,3 @@
-import enum
-
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, DECIMAL, Enum
 from sqlalchemy.orm import relationship
 from ..base import Base

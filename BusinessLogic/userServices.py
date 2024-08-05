@@ -64,7 +64,6 @@ class UserServices:
             return newUser.getUserId
         except Exception as e:
             self.__session.rollback()
-            raise e
             print(f"An error occurred: {e}")
             return None
         finally:
@@ -80,10 +79,6 @@ class UserServices:
                 print("Invalid vehicle type. Please try again.")
                 return None
 
-            # vehicleInstance = Vehicle(
-            #     licensePlate=licensePlate,
-            #     vehicleType=vehicleType
-            # )
             newVehicle = Vehicle(
                 userId=userId,
                 licensePlate=licensePlate,
@@ -95,7 +90,6 @@ class UserServices:
             return newVehicle
         except Exception as e:
             self.__session.rollback()
-            raise e
             print(f"An error occurred: {e}")
             return None
         finally:
@@ -132,7 +126,6 @@ class UserServices:
         valid_password = bcrypt.checkpw(password.encode('utf-8'), user.getPassword.encode('utf-8'))
         print(valid_password)
         return self.responseUser(user) if valid_password else None
-        # return user or False
 
 
     def makeBooking(self, user: User, parkingSlot: ParkingSlot, duration: int) -> Union[Booking, False]:
@@ -154,7 +147,6 @@ class UserServices:
                 return False
         except Exception as e:
             session.rollback()
-            raise e
             print(f"An error occurred: {e}")
             return False
         finally:

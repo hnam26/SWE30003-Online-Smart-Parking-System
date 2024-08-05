@@ -4,19 +4,12 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, DECIMAL
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import CheckConstraint
 from sqlalchemy.sql import expression
-from typing import TYPE_CHECKING
 from ..base import Base
 
-# if TYPE_CHECKING:
 from ..personal.booking import Booking
 from ..personal.user import User
 from ..personal.invoice import Invoice
-# # Create a custom metaclass
-# class DeclarativeABCMeta(ABCMeta, type(declarative_base())):
-#     pass
 
-# # Use the custom metaclass
-# Base = declarative_base(metaclass=DeclarativeABCMeta)
 
 class Payment(Base):
     __tablename__ = 'Payment'
@@ -60,7 +53,7 @@ class Payment(Base):
 
     @property
     def getUser(self):
-        return self.__user
+        return self.user
 
     @property
     def getPaymentMethod(self):
