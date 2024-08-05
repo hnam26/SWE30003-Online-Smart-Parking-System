@@ -1,6 +1,6 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.models.parkingSlot import ParkingSlot as modelSlot
-from DataAccessLayer.models.parkingLot import ParkingLot as modelLot
+from DataAccessLayer.models.parking.parkingSlot import ParkingSlot as modelSlot
+from DataAccessLayer.models.parking.parkingLot import ParkingLot as modelLot
 from DataAccessLayer.models.parking import ParkingSlot
 from DataAccessLayer.models.parking import ParkingLot
 from tabulate import tabulate

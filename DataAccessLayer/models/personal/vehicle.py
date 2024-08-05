@@ -1,19 +1,23 @@
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum as SqlEnum
+from sqlalchemy.orm import relationship
+from DataAccessLayer.models.base import Base
+from typing import TYPE_CHECKING
 from DataAccessLayer.models.utils.typesOfVehicle import TypesOfVehicle
 
 
-class Vehicle:
-    def __init__(self, licensePlate: str, vehicleType: TypesOfVehicle):
-        self.__license = licensePlate
-        self.__vehicleType = vehicleType
+class Vehicle(Base):
+    __tablename__ = 'Vehicle'
+    __vehicleId = Column("vehicle_id", Integer, primary_key=True, autoincrement=True)
+    __userId = Column("user_id", Integer, ForeignKey('User.user_id'), nullable=False)
+    __licensePlate = Column("license_plate", String(20), unique=True, nullable=False)
+    __vehicleType = Column("vehicle_type", SqlEnum(TypesOfVehicle), nullable=False)
+    __user = relationship('User', back_populates='vehicles')
+    __bookings = relationship('Booking', back_populates='vehicle')
 
-    def getLicensePlate(self) -> str:
-        return self.__license
-    
-    def setLicensePlate(self, licensePlate: str):
-        self.__license = licensePlate
-    
-    def getVehicleType(self) -> str:
-        return self.__vehicleType.name
-    
-    def setVehicleType(self, vehicleType: TypesOfVehicle):
-        self.__vehicleType = vehicleType
+    @property
+    def getLicensePlate(self):
+        return self.__licensePlate
+
+    @property
+    def getVehicleType(self):
+        return self.__vehicleType
