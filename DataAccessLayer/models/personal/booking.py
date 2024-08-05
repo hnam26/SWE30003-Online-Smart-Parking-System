@@ -2,7 +2,7 @@ import enum
 
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, DECIMAL, Enum
 from sqlalchemy.orm import relationship
-from .base import Base
+from ..base import Base
 from enum import Enum as pythonEnum
 
 

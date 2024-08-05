@@ -1,3 +1,4 @@
+from BusinessLogic.bookingServices import BookingServices
 from DataAccessLayer.models.personal.user import User
 from BusinessLogic.userServices import UserServices
 from BusinessLogic.parkingServices import ParkingServices
@@ -20,6 +21,7 @@ def functionsMenu(user: User):
     print("Hello, " + name + "!")
     parkingServices = ParkingServices()
     userServices = UserServices()
+    bookingServices = BookingServices()
 
     while True:
         print("What can we help you?")
@@ -58,8 +60,27 @@ def functionsMenu(user: User):
                         print("Booking Failed\n")
                         break
             case "3":
+                bookingId = input("Please enter your booking ID: ")
+                # query the booking with the Id
+                # booking ...
+                # hay là kiếm cái booking mới nhất trong list user.getBooking()? (đoạn ni tùy logic e nha Sinh)
+                if not bookingServices.checkIn(booking):
+                    print("Check In Failed\n")
+                    break
+
+                print("Check In Successful\n")
                 break
             case "4":
+                bookingId = input("Please enter your booking ID: ")
+                # query the booking with the id
+                # booking ...
+                # dưới ni cũng v
+
+                if not bookingServices.checkOut(booking, user.getPayment()):
+                    print("Check Out Failed\n")
+                    break
+
+                print("Check Out Successful\n")
                 break
             case "5":
                 while True:
@@ -68,7 +89,7 @@ def functionsMenu(user: User):
             case "6":
                 print("Thank You")
                 break
-            case default:
+            case _:
                 print("Invalid Choice")
 
 
@@ -107,7 +128,7 @@ def main():
             case "3":
                 print("Thank you for using Online Smart Parking System")
                 break
-            case default:
+            case _:
                 print("Invalid choice")
 
 
