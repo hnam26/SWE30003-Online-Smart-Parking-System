@@ -40,7 +40,7 @@ class Payment(Base, ABC):
         self.__user = user
 
     @abstractmethod
-    def processPayment(self):
+    def processPayment(self, booking: Booking, fee: float):
         pass
 
     @property

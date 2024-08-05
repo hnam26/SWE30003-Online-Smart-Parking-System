@@ -2,6 +2,7 @@ from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.models.personal.booking import Booking
 from DataAccessLayer.models.payment.payment import Payment
 from .invoiceServices import InvoiceServices
+from datetime import datetime
 
 
 class BookingServices:
@@ -10,21 +11,33 @@ class BookingServices:
         self.__session = self.__db.getSession()
 
     @staticmethod
-    def calculateFee(booking: Booking) -> int:
+    def calculateFee(booking: Booking, isLateCheckOut: bool = False) -> int:
         # Calculate the fee based on the duration
         # Fee is $10 per hour
-        if booking.isLateCheckOut():
-            return booking.getDuration() * 10 + 10
+        if isLateCheckOut:
+            current_time = datetime.now()
+            start_time = booking.getStartTime()
+            duration = booking.getDuration()
+
+            # Assuming start_time and duration are datetime objects or can be converted to datetime
+            elapsed_time = (current_time - start_time).total_seconds() / 3600  # Convert to hours
+            total_duration = elapsed_time + duration
+
+            return int(total_duration * 10 + 10)
         return booking.getDuration() * 10
 
-    def makePayment(self, booking: Booking, payment: Payment) -> bool:
+    def makePayment(self, booking: Booking, payment: Payment, isLateCheckOut: bool = False) -> bool:
         try:
             print(booking, payment)
-            fee = self.calculateFee(booking)
-            paymentStatus = payment.processPayment(booking, fee)
-            booking.setPaymentStatus(paymentStatus)
+            fee = self.calculateFee(booking, isLateCheckOut)
+            if not payment.processPayment(booking, fee):
+                return False
 
-            if not booking.isPaymentSuccessful():
+            booking.setStatus("PAID")
+
+            # update and commit to db
+
+            if not booking.getStatus() == "PAID":
                 return False
 
             booking.getParkingSlot().setIsAvailable(False)
@@ -41,35 +54,41 @@ class BookingServices:
             return True
         except Exception as e:
             self.__session.rollback()
-            raise e
             print(f"An error occurred: {e}")
-            return False
+            raise e
+            # return False
         finally:
             self.__session.close()
 
-
     @staticmethod
     def checkIn(booking: Booking) -> bool:
-        if not booking.isPaymentSuccessful():
+        if not booking.getStatus() == "PAID":
             return False
 
-        booking.setCheckInStatus(True)
+        booking.setStatus("IN")
         return True
 
+    def checkOut(self, booking: Booking, payment: Payment) -> bool:
+        if self.checkLateCheckOut(booking):
+            print("You Check Out Late. Please Pay the Extra Fee")
+            if not self.makePayment(booking, payment, isLateCheckOut=True):
+                return False
+
+        booking.getParkingSlot().setIsAvailable(True)
+        booking.setStatus("OUT")
+        return True
+
+
     @staticmethod
-    def validateCheckoutConditions(booking: Booking) -> bool:
-        if booking.isPaymentSuccessful() and booking.isCheckInSuccessful() and not booking.isLateCheckOut():
+    def checkLateCheckOut(booking: Booking) -> bool:
+        current_time = datetime.now()
+        start_time = booking.getStartTime()
+        duration = booking.getDuration()
+
+        # Assuming start_time and duration are datetime objects or can be converted to datetime
+        elapsed_time = (current_time - start_time).total_seconds() / 3600  # Convert to hours
+
+        if elapsed_time > duration:
             return True
 
         return False
-
-    def checkOut(self, booking: Booking) -> bool:
-        self.checkLateCheckOut()
-        if not self.validateCheckoutConditions(booking):
-            return False
-
-        booking.getParkingSlot().setIsAvailable(True)
-        return True
-
-    def checkLateCheckOut(self) -> bool:
-        pass
