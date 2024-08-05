@@ -2,8 +2,11 @@ import re
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import relationship
 from .base import Base
+from typing import TYPE_CHECKING
 from datetime import datetime
 
+if TYPE_CHECKING:
+    pass
 
 
 class User(Base):
