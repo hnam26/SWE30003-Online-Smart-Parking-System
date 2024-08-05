@@ -4,9 +4,7 @@ from .base import Base
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .booking import Booking
-    from .vehicle import Vehicle
-    from .payment import Payment
+    pass
 
 
 class User(Base):
