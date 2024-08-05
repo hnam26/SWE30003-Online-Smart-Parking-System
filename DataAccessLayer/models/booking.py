@@ -1,8 +1,6 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, DECIMAL
+from sqlalchemy import Column, Integer, ForeignKey, DateTime, DECIMAL, Enum
 from sqlalchemy.orm import relationship
 from .base import Base
-from typing import TYPE_CHECKING
-from .user import User
 
 class Booking(Base):
     __tablename__ = 'Booking'
@@ -12,6 +10,7 @@ class Booking(Base):
     __parkingSlotId = Column("parking_slot_id", Integer, ForeignKey('ParkingSlot.parking_slot_id'), nullable=False)
     __startTime = Column("start_time", DateTime, nullable=False)
     __duration = Column("duration", DECIMAL(2, 1), nullable=False)
+    __status = Column("status", Enum('PENDING', 'PAID', 'IN', 'OUT', 'CANCELLED'), nullable=False)
 
     __user = relationship('User', back_populates='bookings')
     __vehicle = relationship('Vehicle', back_populates='bookings')
