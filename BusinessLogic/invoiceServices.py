@@ -7,6 +7,6 @@ class InvoiceServices:
         self.__db = DatabaseAccess()
 
     @staticmethod
-    def generateInvoice(invoice: Invoice):
-        return invoice.getAmount()
+    def generateInvoice(payment):
+        return "Invoice: Paid", payment
 

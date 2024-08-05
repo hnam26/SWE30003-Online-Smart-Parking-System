@@ -8,7 +8,7 @@ class DatabaseAccess:
     __instance = None
     __lock = threading.Lock()
 
-    def __new__(cls, connection_string='mysql+mysqlconnector://root:*Sinh08062004*@localhost/OSPS'):
+    def __new__(cls, connection_string=''): # Create a new database using the provided SQL script then paste the connection string here
         with cls.__lock:
             if cls.__instance is None:
                 cls.__instance = super(DatabaseAccess, cls).__new__(cls)

@@ -16,9 +16,9 @@ def initialMenu():
 
 
 def functionsMenu(user: User):
-    reports = ReportFactory()
-    name = user.getFirstName()
-    print("Hello, " + name + "!")
+    reportFactory = ReportFactory()
+    name = user.getFirstName
+    print("Hello, " + name+"!")
     parkingServices = ParkingServices()
     userServices = UserServices()
     bookingServices = BookingServices()
@@ -36,8 +36,28 @@ def functionsMenu(user: User):
         match choice:
             case "1":
                 while True:
-                    parkingServices.viewAvailableParkingSlots()
-                    break
+                    try:
+                        parkingLots = parkingServices.viewAllParkingLot()
+                        print("Please select the Parking Lot you want to see:")
+                        
+                        for i in range(len(parkingLots)):
+                            print(f"{i + 1}. {parkingLots[i]}")
+                        
+                        parkingLotChoice = input("Enter your choice: ")
+                        selectedParkingLot = parkingLots[int(parkingLotChoice) - 1]
+                        availableParkingSlots = parkingServices.viewAvailableParkingSlots(selectedParkingLot)
+                        
+                        for i in range(len(availableParkingSlots)):
+                            print(f"{i + 1}. {availableParkingSlots[i].getSlotNumber}")
+                        
+                        break 
+                    except ValueError:
+                        print("Invalid input. Please enter a number.")
+                    except IndexError:
+                        print("Invalid choice. Please select a valid parking lot.")
+                    except Exception as e:
+                        print(f"An unexpected error occurred: {e}")
+
             case "2":
                 while True:
                     slotNumber = input("Parking Slot: ")
@@ -60,31 +80,28 @@ def functionsMenu(user: User):
                         print("Booking Failed\n")
                         break
             case "3":
-                bookingId = input("Please enter your booking ID: ")
-                # query the booking with the Id
-                # booking ...
-                # hay là kiếm cái booking mới nhất trong list user.getBooking()? (đoạn ni tùy logic e nha Sinh)
-                if not bookingServices.checkIn(booking):
-                    print("Check In Failed\n")
+                while True:
+                    bookingId = input("Please enter your booking ID: ")
+                    if not bookingServices.checkIn(bookingId):
+                        print("Check In Failed\n")
+                        break
+
+                    print("Check In Successful\n")
                     break
 
-                print("Check In Successful\n")
-                break
             case "4":
-                bookingId = input("Please enter your booking ID: ")
-                # query the booking with the id
-                # booking ...
-                # dưới ni cũng v
+                while True:
+                    bookingId = input("Please enter your booking ID: ")
 
-                if not bookingServices.checkOut(booking, user.getPayment()):
-                    print("Check Out Failed\n")
+                    if not bookingServices.checkOut(bookingId):
+                        print("Check Out Failed\n")
+                        break
+
+                    print("Check Out Successful\n")
                     break
-
-                print("Check Out Successful\n")
-                break
             case "5":
                 while True:
-                    reports.reportMenu()
+                    reportFactory.reportMenu(user.getUserId)
                     break
             case "6":
                 print("Thank You")
@@ -115,9 +132,14 @@ def main():
                 userServices = UserServices()
                 while True:
                     newUser = userServices.register(
-                        input("First Name: "), input("Last Name: "), input("Email: "),
-                        input("Phone Number: "), input("Date of Birth: "),
-                        input("Username: "), input("Password: "))
+                        input("First Name: "), 
+                        input("Last Name: "), 
+                        input("Email: "),
+                        input("Phone Number: "), 
+                        input("Date of Birth: "),
+                        input("Username: "), 
+                        input("Password: ")
+                        )
                     
                     if not newUser:
                         print("Registration Failed\n")

@@ -9,8 +9,9 @@ class ParkingSlot(Base):
     __parkingLotId = Column("parking_lot_id", Integer, ForeignKey('ParkingLot.parking_lot_id'), nullable=False)
     __slotNumber = Column("slot_number", String(10), nullable=False)
     __isAvailable = Column("is_available", Boolean, nullable=False)
-    __parkingLot = relationship('ParkingLot', back_populates='slots')
-    __bookings = relationship('Booking', back_populates='parking_slot')
+
+    parkingLot = relationship('ParkingLot', back_populates='slots')
+    bookings = relationship('Booking', back_populates='parkingSlot')
 
     @property
     def getSlotNumber(self):
@@ -23,3 +24,7 @@ class ParkingSlot(Base):
     @getIsAvailable.setter
     def setIsAvailable(self, isAvailable: bool):
         self.__isAvailable = isAvailable
+
+    @property
+    def getParkingSlotId(self):
+        return self.__parkingSlotId

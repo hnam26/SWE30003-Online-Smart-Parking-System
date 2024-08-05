@@ -1,11 +1,14 @@
-import enum
-
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, DECIMAL, Enum
 from sqlalchemy.orm import relationship
 from ..base import Base
 from enum import Enum as pythonEnum
-
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .user import User
+    from ..payment.payment import Payment
+    from .vehicle import Vehicle
+    from ..parking.parkingSlot import ParkingSlot
+    
 class BookingStatus(pythonEnum):
     PENDING = 'PENDING'
     PAID = 'PAID'
@@ -21,24 +24,25 @@ class Booking(Base):
     __parkingSlotId = Column("parking_slot_id", Integer, ForeignKey('ParkingSlot.parking_slot_id'), nullable=False)
     __startTime = Column("start_time", DateTime, nullable=False)
     __duration = Column("duration", DECIMAL(2, 1), nullable=False)
-    __status = Column("status", Enum('PENDING', 'PAID', 'IN', 'OUT', 'CANCELLED'), nullable=False)
+    status = Column("status", Enum('PENDING', 'PAID', 'IN', 'OUT', 'CANCELLED'), nullable=False)
 
-    __user = relationship('User', back_populates='bookings')
-    __vehicle = relationship('Vehicle', back_populates='bookings')
-    __parkingSlot = relationship('ParkingSlot', back_populates='bookings')
-    __payment = relationship('Payment', uselist=False, back_populates='booking')
+    user = relationship('User', back_populates='bookings')
+    vehicle = relationship('Vehicle', back_populates='bookings')
+    parkingSlot = relationship('ParkingSlot', back_populates='bookings')
+    payment = relationship('Payment', uselist=False, back_populates='booking')
+
 
     @property
     def getUser(self):
-        return self.__user
+        return self.user
 
     @property
     def getVehicle(self):
-        return self.__vehicle
+        return self.vehicle
 
     @property
-    def getParkingSlot(self):
-        return self.__parkingSlot
+    def getParkingSlotId(self):
+        return self.__parkingSlotId
 
     @property
     def getStartTime(self):
@@ -50,8 +54,12 @@ class Booking(Base):
 
     @property
     def getStatus(self):
-        return self.__status
+        return self.status
 
     @getStatus.setter
-    def setStatus(self, status : BookingStatus):
-        self.__status = status
+    def setStatus(self, status: BookingStatus):
+        self.status = status
+
+    @property
+    def getBookingId(self):
+        return self.__bookingId

@@ -11,7 +11,7 @@ class ReportFactory:
         else:
             raise ValueError(f"Unknown report type: {reportType}")
 
-    def reportMenu(self):
+    def reportMenu(self, userId: int):
         while True:
             print("Select Report Type:")
             print("1. User Report")
@@ -21,20 +21,14 @@ class ReportFactory:
 
             try:
                 match choice:
-
                     case '1':
                         reportType = 'user'
-                        try:
-                            userId = int(input("Enter the user ID: ").strip())
-                        except ValueError:
-                            print("Invalid user ID. Please enter a numeric value.")
-                            return
                     case '2':
                         reportType = 'management'
                         userId = None  
                     case '3':
                         break
-                    case default:
+                    case _:
                         print("Invalid choice. Please try again.")
                         break
 
