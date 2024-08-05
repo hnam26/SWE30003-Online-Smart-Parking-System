@@ -2,15 +2,19 @@ from sqlalchemy import Column, Integer, ForeignKey, DateTime, DECIMAL
 from sqlalchemy.orm import relationship
 from .base import Base
 from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from .payment import Payment
-
-
+from .payment.payment import Payment
 class Invoice(Base):
     __tablename__ = 'Invoice'
-    invoice_id = Column(Integer, primary_key=True, autoincrement=True)
-    payment_id = Column(Integer, ForeignKey('Payment.payment_id'), nullable=False, unique=True)
-    issue_date = Column(DateTime, nullable=False)
-    amount = Column(DECIMAL(10, 2), nullable=False)
-    payment = relationship('Payment', back_populates='invoice')
+    __invoiceId = Column("invoice_id", Integer, primary_key=True, autoincrement=True)
+    __paymentId = Column("payment_id", Integer, ForeignKey('Payment.payment_id'), nullable=False, unique=True)
+    __issueDate = Column("issue_date", DateTime, nullable=False)
+    __amount = Column("amount", DECIMAL(10, 2), nullable=False)
+    __payment = relationship('Payment', back_populates='invoice')
+
+    @property
+    def getAmount(self):
+        return self.__amount
+
+    @property
+    def getPayment(self):
+        return self.__payment

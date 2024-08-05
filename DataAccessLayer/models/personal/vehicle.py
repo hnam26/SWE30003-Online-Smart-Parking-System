@@ -1,4 +1,4 @@
-from DataAccessLayer.utils.typesOfVehicle import TypesOfVehicle
+from DataAccessLayer.models.utils.typesOfVehicle import TypesOfVehicle
 
 
 class Vehicle:
