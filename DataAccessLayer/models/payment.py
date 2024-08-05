@@ -12,12 +12,12 @@ if TYPE_CHECKING:
 
 class Payment(Base):
     __tablename__ = 'Payment'
-    payment_id = Column(Integer, primary_key=True, autoincrement=True)
-    booking_id = Column(Integer, ForeignKey('Booking.booking_id'), nullable=False, unique=True)
-    user_id = Column(Integer, ForeignKey('User.user_id'), nullable=False)
-    payment_method = Column(String(50), nullable=False)
-    amount = Column(DECIMAL(10, 2), nullable=False)
-    payment_date = Column(DateTime, nullable=False)
-    user = relationship('User', back_populates='payments')
-    booking = relationship('Booking', back_populates='payment')
-    invoice = relationship('Invoice', uselist=False, back_populates='payment')
+    __paymentId = Column("payment_id", Integer, primary_key=True, autoincrement=True)
+    __bookingId = Column("booking_id", Integer, ForeignKey('Booking.booking_id'), nullable=False, unique=True)
+    __userId = Column("user_id", Integer, ForeignKey('User.user_id'), nullable=False)
+    __paymentMethod = Column("payment_method", String(50), nullable=False)
+    __amount = Column("amount", DECIMAL(10, 2), nullable=False)
+    __paymentDate = Column("payment_date", DateTime, nullable=False)
+    __user = relationship('User', back_populates='payments')
+    __booking = relationship('Booking', back_populates='payment')
+    __invoice = relationship('Invoice', uselist=False, back_populates='payment')

@@ -5,7 +5,7 @@ from DataAccessLayer.models.personal.user import User
 from DataAccessLayer.models.user import User as UserModel
 from DataAccessLayer.models.parking import ParkingSlot
 from DataAccessLayer.models.vehicle import Vehicle
-from DataAccessLayer.utils.typesOfVehicle import TypesOfVehicle
+from DataAccessLayer.models.utils.typesOfVehicle import TypesOfVehicle
 from BusinessLogic.bookingServices import BookingServices
 from typing import Union
 
