@@ -1,6 +1,6 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.personal.booking import Booking
-from DataAccessLayer.payment.payment import Payment
+from DataAccessLayer.models.personal import Booking
+from DataAccessLayer.models.payment.payment import Payment
 from .invoiceServices import InvoiceServices
 
 

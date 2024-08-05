@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from DataAccessLayer.payment.payment import Payment
+    pass
 
 
 class Invoice:

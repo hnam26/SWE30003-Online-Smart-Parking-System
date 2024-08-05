@@ -1,5 +1,5 @@
-from DataAccessLayer.report.userReport import UserReport
-from DataAccessLayer.report.managementReport import ManagementReport
+from DataAccessLayer.models.report.userReport import UserReport
+from DataAccessLayer.models.report.managementReport import ManagementReport
 
 class ReportFactory:
     @staticmethod

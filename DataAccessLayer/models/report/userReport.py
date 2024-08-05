@@ -1,7 +1,6 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.report.report import Report
+from DataAccessLayer.models.report.report import Report
 from DataAccessLayer.models.user import User
-from BusinessLogic.userServices import UserServices
 from sqlalchemy import text
 from tabulate import tabulate
 
