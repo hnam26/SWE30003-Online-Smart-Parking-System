@@ -1,17 +1,24 @@
-from abc import ABC, abstractmethod
-
+# from sqlalchemy.ext.declarative import declarative_base
+from abc import ABC, ABCMeta, abstractmethod
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, DECIMAL
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import CheckConstraint
 from sqlalchemy.sql import expression
+from typing import TYPE_CHECKING
+from ..base import Base
 
-from DataAccessLayer.models.base import Base
-from DataAccessLayer.models.personal.booking import Booking
-from DataAccessLayer.models.personal.user import User
-from DataAccessLayer.models.personal.invoice import Invoice
+# if TYPE_CHECKING:
+from ..personal.booking import Booking
+from ..personal.user import User
+from ..personal.invoice import Invoice
+# # Create a custom metaclass
+# class DeclarativeABCMeta(ABCMeta, type(declarative_base())):
+#     pass
 
+# # Use the custom metaclass
+# Base = declarative_base(metaclass=DeclarativeABCMeta)
 
-class Payment(Base, ABC):
+class Payment(Base):
     __tablename__ = 'Payment'
     __paymentId = Column("payment_id", Integer, primary_key=True, autoincrement=True)
     __bookingId = Column("booking_id", Integer, ForeignKey('Booking.booking_id'), nullable=False, unique=True)
@@ -19,9 +26,10 @@ class Payment(Base, ABC):
     __paymentMethod = Column("payment_method", String(50), nullable=False)
     __amount = Column("amount", DECIMAL(10, 2), nullable=False)
     __paymentDate = Column("payment_date", DateTime, nullable=False)
-    __user = relationship('User', back_populates='payments')
-    __booking = relationship('Booking', back_populates='payment')
-    __invoice = relationship('Invoice', uselist=False, back_populates='payment')
+
+    user = relationship('User', back_populates='payments')
+    booking = relationship('Booking', back_populates='payment')
+    invoice = relationship('Invoice', uselist=False, back_populates='payment')
 
     # Constraint to restrict payment_method values
     __table_args__ = (
@@ -31,16 +39,15 @@ class Payment(Base, ABC):
         ),
     )
 
-    def __init__(self, paymentMethod: str, amount: float, booking: Booking, invoice: Invoice, user: User):
-        super().__init__()
+    def __init__(self, paymentMethod: str, amount: float, booking: Booking):
         self.__paymentMethod = paymentMethod
         self.__amount = amount
         self.__booking = booking
-        self.__invoice = invoice
-        self.__user = user
+    
 
     @abstractmethod
     def processPayment(self, booking: Booking, fee: float):
+        return True
         pass
 
     @property
@@ -49,7 +56,7 @@ class Payment(Base, ABC):
 
     @property
     def getInvoice(self):
-        return self.__invoice
+        return self.invoice
 
     @property
     def getUser(self):

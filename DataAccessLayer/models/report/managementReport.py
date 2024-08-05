@@ -8,7 +8,10 @@ class ManagementReport(Report):
         super().__init__()
         self.__db = DatabaseAccess()
 
-    def generateReport(self, user_id=None):
+    def generateReport(self, userId=None):
+        if userId is not None:
+            self.content = "You do not have permission to view this report."
+            return
         session = self.__db.getSession()
         try:
             # Query for total revenue

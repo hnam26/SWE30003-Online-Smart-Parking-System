@@ -1,9 +1,10 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.models.personal.booking import Booking
+from DataAccessLayer.models.personal.booking import Booking, BookingStatus
 from DataAccessLayer.models.payment.payment import Payment
+from DataAccessLayer.models.parking.parkingSlot import ParkingSlot
 from .invoiceServices import InvoiceServices
 from datetime import datetime
-
+from sqlalchemy import update
 
 class BookingServices:
     def __init__(self):
@@ -11,44 +12,66 @@ class BookingServices:
         self.__session = self.__db.getSession()
 
     @staticmethod
-    def calculateFee(booking: Booking, isLateCheckOut: bool = False) -> int:
-        # Calculate the fee based on the duration
+    def calculateFee(booking: Booking, duration = None, isLateCheckOut: bool = False) -> int:
+        # Calculate the fee based on the duration 
         # Fee is $10 per hour
+
         if isLateCheckOut:
+            duration = booking.getDuration
+
             current_time = datetime.now()
-            start_time = booking.getStartTime()
-            duration = booking.getDuration()
+            start_time = booking.getStartTime
 
             # Assuming start_time and duration are datetime objects or can be converted to datetime
             elapsed_time = (current_time - start_time).total_seconds() / 3600  # Convert to hours
-            total_duration = elapsed_time + duration
+            total_duration = (elapsed_time) + float(duration)
 
             return int(total_duration * 10 + 10)
-        return booking.getDuration() * 10
+        return duration * 10
 
-    def makePayment(self, booking: Booking, payment: Payment, isLateCheckOut: bool = False) -> bool:
+    def makePayment(self, booking: Booking, duration: int = None, isLateCheckOut: bool = False) -> bool:
         try:
-            print(booking, payment)
-            fee = self.calculateFee(booking, isLateCheckOut)
+            
+            fee = self.calculateFee(booking, duration, isLateCheckOut)
+            payment = Payment(input("Please Select your Payment Method: Visa or Master\n"), fee, booking)
+            
             if not payment.processPayment(booking, fee):
                 return False
 
-            booking.setStatus("PAID")
+            if isLateCheckOut and payment.processPayment(booking, fee):
+                return True
+            
+            booking.setStatus = BookingStatus.PAID.value
 
-            # update and commit to db
+            # self.__session.execute(
+            # update(Booking).
+            # where(Booking.getBookingId == booking.getBookingId).
+            # values(status="PAID")
+            # )
 
-            if not booking.getStatus() == "PAID":
+            if not booking.getStatus == "PAID":
                 return False
 
-            booking.getParkingSlot().setIsAvailable(False)
+            parkingSlots = self.__session.query(ParkingSlot).all()
+            for parkingSlot in parkingSlots:
+                if parkingSlot.getParkingSlotId == booking.getParkingSlotId:
+                    break
+            parkingSlot.setIsAvailable = False
+            # self.__session.execute(
+            #     update(ParkingSlot).
+            #     where(ParkingSlot.getParkingSlotId == parkingSlot.getParkingSlotId).
+            #     values(is_available=False)
+            # )
+
             invoiceServices = InvoiceServices()
-            invoiceCreated = invoiceServices.generateInvoice(payment.getInvoice())
+            invoiceCreated = invoiceServices.generateInvoice(payment)
 
             if not invoiceCreated:
                 self.__session.rollback()
                 return False
 
-            self.__session.add(payment)
+            # self.__session.add(payment)            
+
             self.__session.commit()
             print("Payment record saved to the database.")
             return True
@@ -60,30 +83,71 @@ class BookingServices:
         finally:
             self.__session.close()
 
-    @staticmethod
-    def checkIn(booking: Booking) -> bool:
-        if not booking.getStatus() == "PAID":
+    def checkIn(self, bookingId: Booking) -> bool:
+        bookings = self.__session.query(Booking).all()
+        
+        for booking in bookings:
+            if booking.getBookingId == bookingId:
+                booking = booking
+                break
+
+        if not booking.getStatus == "PAID":
+            print("unpaid")
             return False
 
-        booking.setStatus("IN")
+        # self.__session.execute(
+        #     update(Booking).
+        #     where(Booking.getBookingId == bookingId).
+        #     values(status="IN")
+        # )
+
+
+        booking.setStatus = BookingStatus.IN.value
         return True
 
-    def checkOut(self, booking: Booking, payment: Payment) -> bool:
+    def checkOut(self, bookingId: int) -> bool:
+
+        bookings = self.__session.query(Booking).all()
+        for booking in bookings:
+            if booking.getBookingId == bookingId:
+                break
+    
         if self.checkLateCheckOut(booking):
             print("You Check Out Late. Please Pay the Extra Fee")
-            if not self.makePayment(booking, payment, isLateCheckOut=True):
+            if not self.makePayment(booking, isLateCheckOut=True):
                 return False
+    
+        parkingSlots = self.__session.query(ParkingSlot).all()
+        for parkingSlot in parkingSlots:
+            if parkingSlot.getParkingSlotId == booking.getParkingSlotId:
+                break
 
-        booking.getParkingSlot().setIsAvailable(True)
-        booking.setStatus("OUT")
+        parkingSlot.setIsAvailable = True
+        # print(parkingSlot.getParkingSlotId)
+        
+        # self.__session.execute(
+        #     update(ParkingSlot).
+        #     where(ParkingSlot.getParkingSlotId == parkingSlot.getParkingSlotId).
+        #     values(is_available=True)
+        # )
+        
+        self.__session.commit()
+
+        # booking.setStatus = BookingStatus.OUT.value
+        # self.__session.execute(
+        #     update(Booking).
+        #     where(Booking.getBookingId == bookingId).
+        #     values(status="OUT")
+        # )
+
         return True
 
 
     @staticmethod
     def checkLateCheckOut(booking: Booking) -> bool:
         current_time = datetime.now()
-        start_time = booking.getStartTime()
-        duration = booking.getDuration()
+        start_time = booking.getStartTime
+        duration = booking.getDuration
 
         # Assuming start_time and duration are datetime objects or can be converted to datetime
         elapsed_time = (current_time - start_time).total_seconds() / 3600  # Convert to hours

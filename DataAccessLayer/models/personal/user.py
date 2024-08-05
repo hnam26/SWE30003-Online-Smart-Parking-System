@@ -1,7 +1,7 @@
 import re
 from sqlalchemy import Column, Integer, String, Date, CheckConstraint
 from sqlalchemy.orm import relationship
-from .base import Base
+from ..base import Base
 from datetime import datetime
 
 
@@ -16,9 +16,9 @@ class User(Base):
     __phone = Column("phone", String(10), nullable=False)
     __dob = Column("dob", Date, nullable=False)
 
-    __vehicles = relationship('Vehicle', back_populates='user')
-    __bookings = relationship('Booking', back_populates='user')
-    __payments = relationship('Payment', back_populates='user')
+    vehicles = relationship('Vehicle', back_populates='user')
+    bookings = relationship('Booking', back_populates='user')
+    payments = relationship('Payment', back_populates='user')
 
     __table_args__ = (
         CheckConstraint(
@@ -44,6 +44,7 @@ class User(Base):
         self.__firstName = firstName
         self.__lastName = lastName
 
+
     @staticmethod
     def validateEmail(email):
         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
@@ -61,22 +62,23 @@ class User(Base):
     @staticmethod
     def validateDob(dob):
         dob_regex = r'^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$'
-        if not re.match(dob_regex, dob.strip()):
+        dob_str = str(dob).strip()
+        if not re.match(dob_regex, dob_str):
             raise ValueError("Invalid date of birth")
         date = datetime.strptime(dob, "%d-%m-%Y").date()
         return date
-
+    
     @property
     def getVehicle(self):
-        return self.__vehicles
+        return self.vehicles
 
     @property
-    def getBooking(self):
-        return self.__bookings
+    def getBookings(self):
+        return self.bookings
 
     @property
     def getPayment(self):
-        return self.__payments
+        return self.payments
 
     @property
     def getUsername(self):
@@ -85,3 +87,27 @@ class User(Base):
     @property
     def getPassword(self):
         return self.__password
+    
+    @property
+    def getFirstName(self):
+        return self.__firstName
+    
+    @property
+    def getLastName(self):
+        return self.__lastName
+    
+    @property
+    def getEmail(self):
+        return self.__email
+    
+    @property
+    def getPhone(self):
+        return self.__phone
+    
+    @property
+    def getDob(self):
+        return self.__dob
+
+    @property
+    def getUserId(self):
+        return self.__userId

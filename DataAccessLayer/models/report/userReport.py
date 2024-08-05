@@ -1,57 +1,87 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
 from DataAccessLayer.models.report.report import Report
-from DataAccessLayer.models.user import User
+from DataAccessLayer.models.personal.user import User
+from DataAccessLayer.models.personal.booking import Booking
 from sqlalchemy import text
 from tabulate import tabulate
+import sys
 
 class UserReport(Report):
     def __init__(self):
         super().__init__()
         self.__db = DatabaseAccess()
 
-    def generateReport(self, user_id: int=None):
+    def generateReport(self, userId: int=None):
         session = self.__db.getSession()
         try:
-            # Query for personal data
-            user_query = text("SELECT * FROM User WHERE user_id = :user_id")
-            user_result = session.execute(user_query, {'user_id': user_id}).mappings().first()
-            user = session.query(User).filter(User.user_id == user_id)
-            # chỗ này có th xài user services để abstract tốt hoơn
+            for user in session.query(User).all():
+                if user.getUserId == userId:
+                    break
+            # print(user.__dict__)
 
-            if user_result:
-                user_data = dict(user_result)
-                user_info = f"User: {user_data['first_name']} {user_data['last_name']}\nContact: {user_data['email']}, {user_data['phone']}\n"
-
-                # Query for bookings
-                bookings_query = text("SELECT * FROM Booking WHERE user_id = :user_id")
-                bookings_result = session.execute(bookings_query, {'user_id': user_id}).mappings().all()
-                bookings = [dict(booking) for booking in bookings_result]
+            if user:
+                user_info = f"""
+Full Name: {user.getFirstName} {user.getLastName}
+Contact:
+    - Email: {user.getEmail}
+    - Phone Number: {user.getPhone}
+"""
+                        
+                bookings = [{
+                    "bookingId": booking.getBookingId,
+                    "parkingSlotId": booking.getParkingSlot.getSlotNumber,
+                    "vehicle": f"{booking.getVehicle.getLicensePlate} ({booking.getVehicle.getVehicleType.value})",
+                    "startTime": booking.getStartTime,
+                    "duration": booking.getDuration,
+                    "status": booking.getStatus
+                    } for booking in user.getBookings]
+                # print(bookings)
 
                 booking_history = tabulate(
                     bookings,
-                    headers={"booking_id": "Booking ID", "parking_slot_id": "Slot", "start_time": "Start Time", "duration": "Duration"},
+                    headers={
+                        "bookingId": "Booking ID", 
+                        "parkingSlotId": "Slot",
+                        "vehicle": "Vehicle",
+                        "startTime": "Start Time", 
+                        "duration": "Duration",
+                        "status": "Status"
+                        },
                     tablefmt="grid"
                 )
+                
+                # print(booking_history)
 
-                # Query for payments
-                payments_query = text("SELECT * FROM Payment WHERE booking_id IN (SELECT booking_id FROM Booking WHERE user_id = :user_id)")
-                payments_result = session.execute(payments_query, {'user_id': user_id}).mappings().all()
-                payments = [dict(payment) for payment in payments_result]
+                payments = [{
+                    "paymentId": payment.getPaymentId,
+                    "bookingId": payment.getBooking.getBookingId,
+                    "amount": payment.getAmount,
+                    "paymentMethod": payment.getPaymentMethod,
+                    "paymentDate": payment.getPaymentDate
+                    } for payment in user.getPayment]
 
                 payment_history = tabulate(
                     payments,
-                    headers={"payment_id": "Payment ID", "amount": "Amount", "payment_date": "Date"},
+                    headers={
+                        "paymentId": "Payment ID", 
+                        "bookingId": "Booking ID",
+                        "amount": "Amount", 
+                        "paymentMethod": "Payment Method",
+                        "paymentDate": "Date"
+                        },
                     tablefmt="grid"
                 )
 
-                self.content = user_info + "\nBooking History:\n" + booking_history + "\n\nPayments:\n" + payment_history
+                self.content = user_info + "\n\nBooking History:\n" + booking_history + "\n\nPayments:\n" + payment_history
             else:
                 self.content = "User not found."
         except Exception as e:
+            raise e
             self.content = f"An error occurred: {e}"
         finally:
             session.close()
 
-    def printReport(self, user_id=None):
-        self.generateReport(user_id)
+    def printReport(self, userId=None):
+        self.generateReport(userId)
+        sys.stdout.reconfigure(encoding='utf-8')
         print(self.content)
