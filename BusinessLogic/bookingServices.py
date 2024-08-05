@@ -1,5 +1,5 @@
 from DataAccessLayer.database.databaseAccess import DatabaseAccess
-from DataAccessLayer.models.personal import Booking
+from DataAccessLayer.models.personal.booking import Booking
 from DataAccessLayer.models.payment.payment import Payment
 from .invoiceServices import InvoiceServices
 
@@ -7,7 +7,7 @@ from .invoiceServices import InvoiceServices
 class BookingServices:
     def __init__(self):
         self.__db = DatabaseAccess()
-        self.session = self.__db.getSession()
+        self.__session = self.__db.getSession()
 
     @staticmethod
     def calculateFee(booking: Booking) -> int:
@@ -32,20 +32,20 @@ class BookingServices:
             invoiceCreated = invoiceServices.generateInvoice(payment.getInvoice())
 
             if not invoiceCreated:
-                self.session.rollback()
+                self.__session.rollback()
                 return False
 
-            self.session.add(payment)
-            self.session.commit()
+            self.__session.add(payment)
+            self.__session.commit()
             print("Payment record saved to the database.")
             return True
         except Exception as e:
-            self.session.rollback()
+            self.__session.rollback()
             raise e
             print(f"An error occurred: {e}")
             return False
         finally:
-            self.session.close()
+            self.__session.close()
 
 
     @staticmethod
